@@ -21,7 +21,7 @@ class JWTAuthentication(BasicAuthentication):
         
         try:
             payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
-            user = User.object.get(pk=payload.get('sub'))
+            user = User.objects.get(pk=payload.get('sub'))
         except jwt.exceptions.InvalidTokenError:
             raise PermissionDenied(detail='Invalid token')
         except User.DoesNotExist:

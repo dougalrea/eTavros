@@ -1,0 +1,140 @@
+[
+{
+  "model": "jwt_auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$Bj17AxJpRKYr$WhSCAMFPxKRf5fBO1gZYzynhWyOY95IG+RKkOa7T4/M=",
+    "last_login": "2021-02-24T16:20:01.440Z",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2021-02-24T16:19:51.561Z",
+    "email": "admin@email.com",
+    "username": "admin",
+    "profile_image": "",
+    "bio": "",
+    "cash_balance": "100000.00",
+    "bitcoin_balance": "0E-8",
+    "ethereum_balance": "0.00000",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "jwt_auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$VrZdJehg3CTL$QZ3KsYKVbcLbNlbqC24L8mAJOCFe3/PrpqZbrBXtrNw=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-02-24T16:21:14.318Z",
+    "email": "test1@email.com",
+    "username": "test1",
+    "profile_image": "",
+    "bio": "",
+    "cash_balance": "100000.00",
+    "bitcoin_balance": "0E-8",
+    "ethereum_balance": "0.00000",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "jwt_auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$usBPQzAMwBX1$hmsqMJwIYikJwINmb2aVvwQ+QkO8X+8d54+SNfcz3Zw=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-02-24T16:29:20.450Z",
+    "email": "test2@email.com",
+    "username": "test2",
+    "profile_image": "",
+    "bio": "",
+    "cash_balance": "100000.00",
+    "bitcoin_balance": "0E-8",
+    "ethereum_balance": "0.00000",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "jwt_auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$TjZF4MmcKbNP$cGXAtlO8MKHnVsaATpUmzhciWSGQ9dlmfuTIAema5Do=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-02-24T16:31:01.552Z",
+    "email": "test3@email.com",
+    "username": "test3",
+    "profile_image": "",
+    "bio": "",
+    "cash_balance": "100000.00",
+    "bitcoin_balance": "0E-8",
+    "ethereum_balance": "0.00000",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "jwt_auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$kkx5TeEEBDyk$ti9V05wiWp4Ck8DHyVmrTERLHhW/U9RMksswUNE3VrQ=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-02-24T16:31:07.667Z",
+    "email": "test4@email.com",
+    "username": "test4",
+    "profile_image": "",
+    "bio": "",
+    "cash_balance": "100000.00",
+    "bitcoin_balance": "0E-8",
+    "ethereum_balance": "0.00000",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "jwt_auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$216000$cohyxKhyTnDx$bGW8AmrEuG5nTM1WV15sm0/0uyYRwKJ9y3TL02pt4UI=",
+    "last_login": null,
+    "is_superuser": false,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2021-02-24T16:31:13.845Z",
+    "email": "test5@email.com",
+    "username": "test5",
+    "profile_image": "",
+    "bio": "",
+    "cash_balance": "100000.00",
+    "bitcoin_balance": "0E-8",
+    "ethereum_balance": "0.00000",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

@@ -1,6 +1,6 @@
 from django.db import models
 
-class Coin(models.Model):
+class TradingPair(models.Model):
     name = models.CharField(max_length=30, unique=True)
     ticker = models.CharField(max_length=5, unique=True)
     symbol = models.CharField(max_length=400)

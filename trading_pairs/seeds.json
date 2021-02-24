@@ -3,7 +3,7 @@
     "model": "trading_pairs.tradingpair",
     "pk": 1,
     "fields": {
-      "name": "Bitcoin",
+      "name": "bitcoin",
       "ticker": "BTC",
       "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
       "description": "Bitcoin is a decentralized cryptocurrency originally described in a 2008 whitepaper by a person, or group of people, using the alias Satoshi Nakamoto. It was launched soon after, in January 2009.",
@@ -16,7 +16,7 @@
     "model": "trading_pairs.tradingpair",
     "pk": 2,
     "fields": {
-      "name": "Ethereum",
+      "name": "ethereum",
       "ticker": "ETH",
       "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
       "description": "Ethereum is a decentralized open-source blockchain system that features its own cryptocurrency, Ether. ETH works as a platform for numerous other cryptocurrencies, as well as for the execution of decentralized smart contracts.",

@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@chakra-ui/react": "^1.3.3",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "axios": "^0.21.1",
     "eslint-plugin-react": "^7.22.0",
+    "framer-motion": "^3.7.0",
     "http-proxy-middleware": "^1.0.6",
+    "lightweight-charts": "^3.3.0",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2"
   },
   "scripts": {

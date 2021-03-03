@@ -26,6 +26,5 @@ class JWTAuthentication(BasicAuthentication):
             raise PermissionDenied(detail='Invalid token')
         except User.DoesNotExist:
             raise PermissionDenied(detail='User not found')
-          
         return (user, token)
       

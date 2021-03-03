@@ -29,3 +29,12 @@ wss://stream.binance.com:9443/ws/btcbusd@kline_5m
         "B": "0"
     }
 }
+
+{
+  'Content-Length': '', 
+  'Content-Type': 'text/plain', 
+  'Host': 'localhost:8000', 
+  'User-Agent': 'insomnia/2020.5.2', 
+  'Interval': '5m', 
+  'Accept': '*/*'
+}

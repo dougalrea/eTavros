@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta
-
+from decimal import Decimal
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from django.conf import settings
 import jwt
 
-from .serializers.common import UserSerializer
+from .serializers.common import UserSerializer, UserSerializerForTrading
 from .serializers.populated import PopulatedUserSerializer
 
 User = get_user_model()
@@ -26,7 +26,6 @@ class RegisterView(APIView):
       
 class LoginView(APIView):
     """Controller for post request to /auth/login"""
-    
         
     def post(self, request):
         credential = request.data.get('credential')
@@ -62,6 +61,7 @@ class LoginView(APIView):
         )
         
 class ProfileView(APIView):
+    """Controller for post request to /auth/profile"""
 
     permission_classes = (IsAuthenticated, )
     
@@ -69,4 +69,32 @@ class ProfileView(APIView):
         user = User.objects.get(pk=request.user.id)
         serialized_user = PopulatedUserSerializer(user)
         return Response(serialized_user.data, status=status.HTTP_200_OK)
+    
+    def put(self, request):       
+        user_to_update = User.objects.get(pk=request.user.id)
+        asset_to_update = str(f'{request.data["tradingPairName"]}_balance')
+        print('asset to update: ', asset_to_update)
+
+        essential_data = {
+            'username': user_to_update.username, 
+            'password': user_to_update.password, 
+            'email': user_to_update.email
+            }
+
+        new_balance_buy = getattr(user_to_update, asset_to_update) + Decimal(f"{request.data['amount']}")
+        new_balance_sell = getattr(user_to_update, asset_to_update) - Decimal(f"{request.data['amount']}")
+        
+        if request.data['buy']:
+            user_to_update.cash_balance -= Decimal(request.data['total'])
+            setattr(user_to_update, asset_to_update, new_balance_buy)
+        else:
+            user_to_update.cash_balance += Decimal(request.data['total'])
+            setattr(user_to_update, asset_to_update, new_balance_sell)
+            
+        updated_user = UserSerializerForTrading(user_to_update, data=essential_data)
+        
+        if updated_user.is_valid():
+            updated_user.save()
+            return Response(updated_user.data, status=status.HTTP_202_ACCEPTED)
+        return Response(updated_user.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
       

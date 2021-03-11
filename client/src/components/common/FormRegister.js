@@ -14,7 +14,7 @@ import {
   InputGroup, 
   InputLeftElement, 
   Stack,
-  useToast 
+  useToast
 } from '@chakra-ui/react'
 import { EmailIcon, LockIcon, AtSignIcon } from '@chakra-ui/icons'
 
@@ -38,7 +38,7 @@ function FormRegister({ registered }) {
       title: 'Registration successful',
       description: 'Please log in to your new account',
       status: 'success',
-      duration: 9000,
+      duration: 5000,
       isClosable: true
     })
   }
@@ -154,7 +154,7 @@ function FormRegister({ registered }) {
           bg='gray.700'
           color='gray.100'
           boxShadow='sm'
-          _hover={{ boxShadow: 'md', bg: 'gray.400' }}
+          _hover={{ boxShadow: 'md', bg: 'gray.800', color: 'white' }}
         >
             Sign Up!
         </Button>

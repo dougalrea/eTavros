@@ -2,30 +2,44 @@
 import { 
   ChakraProvider,
   Flex,
-  Box,
   Spacer,
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
   PopoverCloseButton,
   Popover,
-  useDisclosure,
   Button
-  // Popover,
-  // PopoverTrigger,
-  // PopoverContent,
-  // PopoverHeader,
-  // PopoverBody,
-  // PopoverFooter,
-  // PopoverArrow,
-  // PopoverCloseButton
 } from '@chakra-ui/react'
 import React from 'react'
 import FormRegister from './FormRegister'
+import FormLogin from './FormLogin'
 import  FocusLock from 'react-focus-lock'
+import { Link } from 'react-router-dom'
 
 function Nav() {
-  const { onOpen, onClose, isOpen } = useDisclosure()
+
+  const [isOpenLogin, setIsOpenLogin] = React.useState(false)
+  const [isOpenRegister, setIsOpenRegister] = React.useState(false)
+
+  const closeRegister = () => {
+    setIsOpenRegister(false)
+  }
+  const openRegister = () => {
+    setIsOpenRegister(true)
+  }
+
+  const closeLogin = () => {
+    setIsOpenLogin(false)
+  }
+  const openLogin = () => {
+    setIsOpenLogin(true)
+  }
+
+  const toggleIsOpenLogin = () => {
+    console.log('trying')
+    setIsOpenLogin(!isOpenLogin)
+    console.log(isOpenLogin)
+  }
 
   return (
     <>
@@ -36,24 +50,48 @@ function Nav() {
           justify="space-between"
           wrap="wrap"
           w="100%"
-          p={5}
+          p={4}
           bg='gray.700'
         >
-          <Box display={{ base: 'block', md: 'block' }}
-            flexBasis={{ base: '100%', md: 'auto' }} bg='gray.200'>
-            this is here
-          </Box>
+          <Link to='/markets/'>
+            <Button display={{ base: 'block', md: 'block' }}
+              flexBasis={{ base: '100%', md: 'auto' }} bg='gray.200' as='button'>
+            Markets
+            </Button>
+          </Link>
           <Spacer />
           <Popover
-            isOpen={isOpen}
-            onOpen={onOpen}
-            onClose={onClose}
+            isOpen={isOpenLogin}
+            onOpen={openLogin}
+            onClose={closeLogin}
             placement="left"
             closeOnBlur={true}
             bg='grey.200'
           >
             <PopoverTrigger>
-              <Button bg='gray.200'>
+              <Button bg='gray.200' onClick={toggleIsOpenLogin}
+              >
+                Log in
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent p={5}>
+              <FocusLock returnFocus persistentFocus={false}>
+                <PopoverArrow />
+                <PopoverCloseButton bg='gray.700' color='gray.100' _hover={{ boxShadow: 'md', bg: 'pink.700' }}/>
+                <FormLogin loggedIn={closeLogin} />
+              </FocusLock>
+            </PopoverContent>
+          </Popover>
+          <Popover
+            isOpen={isOpenRegister}
+            onOpen={openRegister}
+            onClose={closeRegister}
+            placement="left"
+            closeOnBlur={true}
+            bg='grey.200'
+          >
+            <PopoverTrigger>
+              <Button bg='gray.200' ml={4}>
                 Register
               </Button>
             </PopoverTrigger>
@@ -61,7 +99,7 @@ function Nav() {
               <FocusLock returnFocus persistentFocus={false}>
                 <PopoverArrow />
                 <PopoverCloseButton bg='gray.700' color='gray.100' _hover={{ boxShadow: 'md', bg: 'pink.700' }}/>
-                <FormRegister registered={onClose} />
+                <FormRegister registered={closeRegister} />
               </FocusLock>
             </PopoverContent>
           </Popover>

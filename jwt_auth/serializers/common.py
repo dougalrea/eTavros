@@ -34,5 +34,12 @@ class NestedUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username')
+        fields = ('id', 'username', 'profile_image')
+        
+
+class UserSerializerForTrading(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        fields = '__all__'
         

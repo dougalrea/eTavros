@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'jwt_auth',
     'trading_pairs',
+    'comments',
+    'trade_posts'
 ]
 
 MIDDLEWARE = [

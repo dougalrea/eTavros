@@ -11,4 +11,3 @@ class User(AbstractUser):
     cash_balance = models.DecimalField(max_digits=20, decimal_places=2, default=100000)
     bitcoin_balance = models.DecimalField(max_digits=20, decimal_places=8, default=0)
     ethereum_balance = models.DecimalField(max_digits=20, decimal_places=5, default=0)
-    

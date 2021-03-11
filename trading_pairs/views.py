@@ -11,6 +11,7 @@ from binance.client import Client
 from .secrets import API_KEY, API_SECRET
 from .models import TradingPair
 from .serializers.common import TradingPairSerializer
+from .serializers.populated import PopulatedTradingPairSerializer
 
 class TradingPairIndexView(APIView):
     """Controller for get request to /markets endpoint"""
@@ -32,7 +33,7 @@ class TradingPairDetailView(APIView):
     
     def get(self, _request, name):
         trading_pair = self.get_trading_pair(name=name)
-        serialized_trading_pair = TradingPairSerializer(trading_pair)
+        serialized_trading_pair = PopulatedTradingPairSerializer(trading_pair)
         return Response(serialized_trading_pair.data, status=status.HTTP_200_OK)
       
 class TradingPairHistoricalData(APIView):
@@ -84,10 +85,6 @@ class TradingPairHistoricalData(APIView):
                 }
             return switcher.get(time_frame, "Invalid header")
           
-        # print("get historical klines request:", f'{trading_pair.ticker}USDT',
-        #     kline_arg(time_frame), 
-        #     f'{historic_day, historic_month}, {historic_year}', f'{now_day, now_month}, {now_year}')
-                
         candlesticks = client.get_historical_klines(
             f'{trading_pair.ticker}USDT',
             kline_arg(time_frame), 
@@ -106,4 +103,23 @@ class TradingPairHistoricalData(APIView):
             processed_candlesticks.append(candlestick)
         
         return JsonResponse(processed_candlesticks, safe=False)
-      
+
+class TradingPair24hrData(APIView):
+    """Controller for get requests to /markets/name/history/day endpoint"""
+    
+    def get_trading_pair(self, name):
+        """ returns trading pair from db by its name or responds 404 not found """
+        try:
+            return TradingPair.objects.get(name=name)
+        except TradingPair.DoesNotExist:
+            raise NotFound()
+        
+    def get(self, request, name):
+
+        client = Client(API_KEY, API_SECRET)
+
+        trading_pair = self.get_trading_pair(name=name)
+        
+        lastDayData = client.get_ticker(symbol=f'{trading_pair.ticker}USDT')
+        
+        return JsonResponse(lastDayData, safe=False)

@@ -1,30 +1,34 @@
 [
-  {
-    "model": "trading_pairs.tradingpair",
-    "pk": 1,
-    "fields": {
-      "name": "bitcoin",
-      "ticker": "BTC",
-      "web_socket_url": "wss://stream.binance.com:9443/ws/btcbusd@kline_5m",
-      "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
-      "description": "Bitcoin is a decentralized cryptocurrency originally described in a 2008 whitepaper by a person, or group of people, using the alias Satoshi Nakamoto. It was launched soon after, in January 2009.",
-      "favourited_by": [
-        1
-      ]
-    }
-  },
-  {
-    "model": "trading_pairs.tradingpair",
-    "pk": 2,
-    "fields": {
-      "name": "ethereum",
-      "ticker": "ETH",
-      "web_socket_url": "wss://stream.binance.com:9443/ws/ethbusd@kline_5m",
-      "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
-      "description": "Ethereum is a decentralized open-source blockchain system that features its own cryptocurrency, Ether. ETH works as a platform for numerous other cryptocurrencies, as well as for the execution of decentralized smart contracts.",
-      "favourited_by": [
-        2
-      ]
-    }
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 1,
+  "fields": {
+    "name": "bitcoin",
+    "ticker": "BTC",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
+    "description": "Bitcoin is a decentralized cryptocurrency originally described in a 2008 whitepaper by a person, or group of people, using the alias Satoshi Nakamoto. It was launched soon after, in January 2009.",
+    "web_socket_url": "wss://stream.binance.com:9443/ws/btcbusd@kline_5m",
+    "favourited_by": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
   }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 2,
+  "fields": {
+    "name": "ethereum",
+    "ticker": "ETH",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
+    "description": "Ethereum is a decentralized open-source blockchain system that features its own cryptocurrency, Ether. ETH works as a platform for numerous other cryptocurrencies, as well as for the execution of decentralized smart contracts.",
+    "web_socket_url": "wss://stream.binance.com:9443/ws/ethbusd@kline_5m",
+    "favourited_by": [
+      2
+    ]
+  }
+}
 ]

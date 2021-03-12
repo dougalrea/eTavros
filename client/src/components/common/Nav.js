@@ -69,7 +69,7 @@ function Nav() {
             bg='grey.200'
           >
             <PopoverTrigger>
-              <Button bg='gray.200' onClick={toggleIsOpenLogin}
+              <Button bg='gray.200' color='gray.800' onClick={toggleIsOpenLogin}
               >
                 Log in
               </Button>
@@ -91,7 +91,7 @@ function Nav() {
             bg='grey.200'
           >
             <PopoverTrigger>
-              <Button bg='gray.200' ml={4}>
+              <Button bg='gray.200' ml={4} color='gray.800'>
                 Register
               </Button>
             </PopoverTrigger>

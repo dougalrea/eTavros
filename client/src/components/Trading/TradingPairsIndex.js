@@ -35,7 +35,7 @@ function TradingPairsIndex() {
           <TabPanels>
             <TabPanel>
               <Box pb={4} pl={4} pr={4}>
-                <Grid templateColumns="repeat(19, 1fr)" gap={2} alignItems='center' color='gray.800'>
+                <Grid templateColumns="repeat(20, 1fr)" gap={2} alignItems='center' color='gray.800'>
                   <GridItem colStart={4} colEnd={6}>
                     <Text fontSize='sm'>
                       Current Price
@@ -74,6 +74,8 @@ function TradingPairsIndex() {
                     return (
                       <IndexCard key={tradingPair.id} tradingPair={tradingPair} ticker={tradingPair.ticker} />
                     )
+                  }).sort(function(a, b) {
+                    return a.key - b.key
                   })}
                 </Stack>
                 :

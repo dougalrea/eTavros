@@ -254,7 +254,7 @@ function TradingPairShow() {
                       alt="coin symbol" 
                     /> 
                     <Heading fontSize='xl' ml={3} fontWeight='medium'>
-                      {tradingPair.name.toUpperCase() + ', ' + tradingPair.ticker} 
+                      {tradingPair.name.toUpperCase() + '  (' + tradingPair.ticker + ')'} 
                     </Heading>
                   </Center>
                   : 'data loading'}

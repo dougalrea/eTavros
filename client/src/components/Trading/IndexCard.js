@@ -32,17 +32,17 @@ function IndexCard({ tradingPair, ticker }) {
   return (
     <Box rounded='lg' bg='gray.700' color='gray.100' p={4} >
       {tradingPair ? 
-        <Grid templateColumns="repeat(19, 1fr)" gap={2} alignItems='center' fontSize='lg'>
+        <Grid templateColumns="repeat(20, 1fr)" gap={2} alignItems='center' fontSize='md'>
           <GridItem colSpan={1}>
             <Avatar
-              size='md'
+              size='sm'
               name={tradingPair.name}
               src={tradingPair.symbol}
               alt="coin symbol" 
             /> 
           </GridItem>
           <GridItem colSpan={2} >
-            <Text fontSize='xl' fontWeight='semibold'>
+            <Text fontSize='lg' fontWeight='semibold'>
               {tradingPair.name.toUpperCase()}
             </Text>
           </GridItem>
@@ -86,7 +86,7 @@ function IndexCard({ tradingPair, ticker }) {
               :
               <Skeleton startColor="green.600" endColor="orange.600" height="20px"/>}
           </GridItem>
-          <GridItem colSpan={2}>
+          <GridItem colSpan={3}>
             {liveMarketData ?
               <Text>
                 {thousandsSeparators(parseFloat(liveMarketData.v).toFixed(0)) + ' ' + ticker}
@@ -94,9 +94,9 @@ function IndexCard({ tradingPair, ticker }) {
               :
               <Skeleton startColor="green.600" endColor="red.600" height="20px"/>}
           </GridItem>
-          <GridItem colSpan={3} alignContent='end'>
+          <GridItem colSpan={3}>
             <Link to={`/markets/${tradingPair.name}/`}>
-              <Button bg='gray.200' color='gray.800'>
+              <Button bg='gray.200' color='gray.800' w='full'>
               Trade {tradingPair.ticker}/vUSD
               </Button>
             </Link>

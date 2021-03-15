@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { EmailIcon, LockIcon } from '@chakra-ui/icons'
 
-function FormLogin({ loggedIn }) {
+function FormLogin({ loggedIn, getUserData }) {
   const [error, setError] = React.useState(false)
   const { formdata, handleChange } = useForm({
     credential: '',
@@ -51,6 +51,7 @@ function FormLogin({ loggedIn }) {
             loggedIn()
             triggerToast()
             setToken(response.data.token)
+            getUserData()
           }
         })
     } catch (e) {

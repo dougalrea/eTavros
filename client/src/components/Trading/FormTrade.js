@@ -61,6 +61,15 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
       console.log(error)
     }
   }
+  const getTradingPairData = async () => {
+    try {
+      const { data } = await getOneTradingPair(name)
+      setTradingPair(data)
+      console.log('trading pair data found')
+    } catch (error) {
+      console.log('Error retrieving trading pair data from django: ', error)
+    }
+  }
 
   const handleChange = (event) => {
     if (event.target.name === 'amount') {
@@ -112,68 +121,57 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
 
   const handleTrade = async event => {
     event.preventDefault()
-    await refreshLastPrice()
     try {
       formdata.amount = formdata.total / lastPrice
       formdata.tradingPairName = tradingPair.name
       formdata.buy = orderType === 'Buy'
-      if ((orderType === 'Buy' && parseFloat(userData?.cash_balance) >= parseFloat(formdata?.total)) || (orderType === 'Sell' && parseFloat(userData[`${tradingPair?.name}_balance`]) >= parseFloat(formdata?.amount)) && formdata?.total >= 0 && formdata?.amount >= 0) {
-        console.log('if clause ran tue :', formdata)
-        try {
-          const token = getToken()
-          await performTrade(formdata, token)
-        } catch (error) {
-          console.log('couldnt perform trade: ', error)
-        }
-        try {
-          const token = getToken()
-          await createTradePost({
-            'bought_or_sold': formdata.buy,
-            'amount': formdata.amount,
-            'total': formdata.total,
-            'trading_pair': tradingPair.id
-          }, token)
-        } catch (error) {
-          console.log('couldnt create trade post: ', error)
-        }
-        triggerToast()
-        const getTradingPairData = async () => {
-          try {
-            const { data } = await getOneTradingPair(name)
-            setTradingPair(data)
-            console.log('trading pair data found')
-          } catch (error) {
-            console.log('Error retrieving trading pair data from django: ', error)
-          }
-        }
-        getUserData()
-        getTradingPairData()
-        setError(false)
-        setFormdata(initialState)
-      } else {
-        if (!token) {
-          setError('You must be logged in to make trades!')
-        } else setError('Insufficient balance!')
-        setTimeout(() => {
-          setError(false)
-        }, 2800)
-      }
+      const token = getToken()
+      await refreshLastPrice()
+      await performTrade(formdata, token)
+      await createTradePost({
+        'bought_or_sold': formdata.buy,
+        'amount': formdata.amount,
+        'total': formdata.total,
+        'trading_pair': tradingPair.id
+      }, token)
+      triggerToast()
+      getUserData()
+      getTradingPairData()
+      setError(false)
+      setFormdata(initialState)
     } catch (error) {
-      console.log(error)
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        return setError('Request failed on server side... sorry about that!')
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        return console.log(error.request)
+      if (!token) {
+        setError('You must be logged in to make trades!')
+      } else if (
+        (
+          orderType === 'Buy' 
+          && 
+          parseFloat(userData?.cash_balance) < parseFloat(formdata?.total)
+        ) 
+        || 
+        (
+          orderType === 'Sell' 
+          && 
+          parseFloat(userData[`${tradingPair?.name}_balance`]) < parseFloat(formdata?.amount)
+        )
+        ||
+        (
+          formdata?.total < 0
+        )
+        ||
+        (
+          formdata?.amount < 0
+        )
+      ) {
+        setError('Insufficient balance!')
       } else {
-        // Something happened in setting up the request that triggered an Error
-        return setError('An unexpected error occured, sorry about this! ', error.message)
+        console.log('unsecpected error: ', error)
+        setError('Something unexpected happened, sorry about that!')
       }
     }
+    setTimeout(() => {
+      setError(false)
+    }, 2800)
     setBalanceChangeTicker(!balanceChangeTicker)
   }
 
@@ -191,7 +189,6 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
               :
               <Center pb={3}>
                 {!token ? 
-
                   `Log in to view ${orderType === 'Buy' ? 'vUSD' : tradingPair?.ticker} balance` :
                   'loading'}
               </Center>

@@ -16,9 +16,6 @@ function TradingPairsIndex() {
     }
   }, [])
 
-  // `wss://stream.binance.com:9443/stream?streams=${tradingPairData[0].ticker.toString().toLowerCase()}@ticker/${tradingPairData[1].ticker.toString().toLowerCase()}@ticker/`
-
-
   return (
     <ChakraProvider>
       <Container minW='full' minH='container.lg' pr={14} pl={14} overflow='scroll' bg='gray.400' borderColor='black' borderWidth='1px'>

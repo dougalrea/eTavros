@@ -14,3 +14,7 @@ export function getPayload() {
   if (parts.length < 3) return false
   return JSON.parse(window.atob(parts[1]))
 }
+
+export function logoutUser() {
+  window.localStorage.removeItem('token')
+}

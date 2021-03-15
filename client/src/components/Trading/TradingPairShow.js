@@ -49,7 +49,7 @@ function TradingPairShow() {
   const [webSocketHasBeenAssigned, setWebSocketHasBeenAssigned] = React.useState(false)
 
   let chart = undefined
-  let dayVolumeTicker = true
+  let dayVolumeTicker = 0
   const [candleSeries, setCandleSeries] = React.useState(undefined)
 
   const { name } = useParams()
@@ -183,17 +183,17 @@ function TradingPairShow() {
             low: candlestick.l,
             close: candlestick.c
           })
-          if (dayVolumeTicker) {
+          if (dayVolumeTicker % 2 === 0 && dayVolumeTicker < 38) {
             try {
               const { data } = await get24HourData(name)
               setLastDayData(data)
-              dayVolumeTicker = !dayVolumeTicker
-              console.log('24 hr data found')
+              dayVolumeTicker ++
+              console.log('24 hr data found: ', dayVolumeTicker)
             } catch (error) {
               console.log('Error retrieving 24 hr data: ', error)
             }
           } else {
-            dayVolumeTicker = !dayVolumeTicker
+            dayVolumeTicker ++
           }
         }
       }

@@ -73,7 +73,6 @@ class ProfileView(APIView):
     def put(self, request):       
         user_to_update = User.objects.get(pk=request.user.id)
         asset_to_update = str(f'{request.data["tradingPairName"]}_balance')
-        print('asset to update: ', asset_to_update)
 
         essential_data = {
             'username': user_to_update.username, 
@@ -83,11 +82,17 @@ class ProfileView(APIView):
 
         new_balance_buy = getattr(user_to_update, asset_to_update) + Decimal(f"{request.data['amount']}")
         new_balance_sell = getattr(user_to_update, asset_to_update) - Decimal(f"{request.data['amount']}")
+
+          
         
         if request.data['buy']:
+            if user_to_update.cash_balance - Decimal(request.data['total']) < 0:
+                return Response('Insufficient balance in account', status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             user_to_update.cash_balance -= Decimal(request.data['total'])
             setattr(user_to_update, asset_to_update, new_balance_buy)
         else:
+            if new_balance_sell < 0:
+                return Response('Insufficient balance in account', status=status.HTTP_422_UNPROCESSABLE_ENTITY)
             user_to_update.cash_balance += Decimal(request.data['total'])
             setattr(user_to_update, asset_to_update, new_balance_sell)
             

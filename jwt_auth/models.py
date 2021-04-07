@@ -1,8 +1,6 @@
-from decimal import Decimal
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.db.models.fields.related import ManyToManyField
 
 class User(AbstractUser):
     email = models.CharField(max_length=80, unique=True)
@@ -22,3 +20,4 @@ class User(AbstractUser):
     monero_balance = models.DecimalField(max_digits=20, decimal_places=5, default=0, validators=[MinValueValidator(0.00001)])
     EOS_balance = models.DecimalField(max_digits=20, decimal_places=5, default=0, validators=[MinValueValidator(0.00001)])
     neo_balance = models.DecimalField(max_digits=20, decimal_places=5, default=0, validators=[MinValueValidator(0.00001)])
+    

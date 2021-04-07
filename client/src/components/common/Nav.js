@@ -83,7 +83,6 @@ function Nav() {
       const token = getToken()
       const { data } = await getUserProfile(token)
       setUserData(data)
-      console.log('user data successfully found')
     } catch (error) {
       console.log('failed getting user data: ', error)
     }
@@ -203,7 +202,7 @@ function Nav() {
                         Dogecoin
                       </Text>
                       <Text>
-                        {userData.dogecoin_balance}
+                        {parseFloat(userData.dogecoin_balance) ? userData.dogecoin_balance : '-'}
                       </Text>
                     </Flex>
                     <Flex justify='space-between'>
@@ -211,7 +210,7 @@ function Nav() {
                         Terra
                       </Text>
                       <Text>
-                        {userData.terra_balance}
+                        {parseFloat(userData.terra_balance) ? userData.terra_balance : '-'}
                       </Text>
                     </Flex>
                     <Flex justify='space-between'>
@@ -219,7 +218,7 @@ function Nav() {
                         VeChain
                       </Text>
                       <Text>
-                        {userData.veChain_balance}
+                        {parseFloat(userData.veChain_balance) ? userData.veChain_balance : '-'}
                       </Text>
                     </Flex>
                     <Flex justify='space-between'>
@@ -227,7 +226,7 @@ function Nav() {
                         Monero
                       </Text>
                       <Text>
-                        {userData.monero_balance}
+                        {parseFloat(userData.monero_balance) ? userData.monero_balance : '-'}
                       </Text>
                     </Flex>
                     <Flex justify='space-between'>
@@ -235,7 +234,7 @@ function Nav() {
                         EOS
                       </Text>
                       <Text>
-                        {userData.EOS_balance}
+                        {parseFloat(userData.EOS_balance) ? userData.EOS_balance : '-'}
                       </Text>
                     </Flex>
                     <Flex justify='space-between'>
@@ -243,7 +242,7 @@ function Nav() {
                         Neo
                       </Text>
                       <Text>
-                        {userData.neo_balance}
+                        {parseFloat(userData.neo_balance) ? userData.neo_balance : '-'}
                       </Text>
                     </Flex>
                     <Spacer />

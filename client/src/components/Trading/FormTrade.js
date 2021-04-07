@@ -55,7 +55,6 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
       const token = getToken()
       const { data } = await getUserProfile(token)
       setUserData(data)
-      console.log('this worked')
     } catch (error) {
       console.log('failed getting user data')
       console.log(error)

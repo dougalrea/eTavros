@@ -17,7 +17,7 @@ export function get24HourData(name) {
 export function getHistoricalData(name, interval) {
   return axios.get(`${baseUrl}/markets/${name}/history/`, {
     headers: {
-      interval: `${interval}`
+      Interval: `${interval}`
     }
   })
 }
@@ -64,3 +64,18 @@ export function createComment(formdata, token) {
   })
 }
 
+export function favouriteCoin(name, token) {
+  return axios.post(`${baseUrl}/markets/${name}/favourite/`, name, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+}
+
+export function unfavouriteCoin(name, token) {
+  return axios.delete(`${baseUrl}/markets/${name}/favourite/`, name, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  })
+}

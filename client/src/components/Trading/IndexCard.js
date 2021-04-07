@@ -27,6 +27,13 @@ function IndexCard({ tradingPair, ticker }) {
     if (tradingPair) {
       getLiveDataFeed()
     }
+
+    return function cleanup() {
+      if (socketRef.current) {
+        console.log('cleaning up the index data streams')
+        socketRef.current.close()
+      }
+    }
   }, [tradingPair])
 
   return (

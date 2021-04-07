@@ -1,20 +1,20 @@
 from datetime import datetime, timedelta
-from time import time
-from typing import Type
 from django.http import JsonResponse
-from pytz import country_names
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.exceptions import NotFound
+from rest_framework.exceptions import NotFound, PermissionDenied
 from binance.client import Client
 from .secrets import API_KEY, API_SECRET
 from .models import TradingPair
 from .serializers.common import TradingPairSerializer
 from .serializers.populated import PopulatedTradingPairSerializer
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 class TradingPairIndexView(APIView):
     """Controller for get request to /markets endpoint"""
+
+    permission_classes = (IsAuthenticatedOrReadOnly, )
 
     def get(self, request):
         trading_pairs = TradingPair.objects.all()
@@ -23,6 +23,8 @@ class TradingPairIndexView(APIView):
       
 class TradingPairDetailView(APIView):
     """Controller for get request to /markets/name endpoint"""
+    
+    permission_classes = (IsAuthenticatedOrReadOnly, )
     
     def get_trading_pair(self, name):
         """ returns pokemon from db by its name or responds 404 not found """
@@ -114,7 +116,7 @@ class TradingPair24hrData(APIView):
         except TradingPair.DoesNotExist:
             raise NotFound()
         
-    def get(self, request, name):
+    def get(self, _request, name):
 
         client = Client(API_KEY, API_SECRET)
 
@@ -123,3 +125,14 @@ class TradingPair24hrData(APIView):
         lastDayData = client.get_ticker(symbol=f'{trading_pair.ticker}USDT')
         
         return JsonResponse(lastDayData, safe=False)
+      
+class TradingPairFavourite(TradingPairDetailView):
+    """Constroller for requests to the /markets/name/favourite/ endpoint"""
+    
+    def post(self, request, name):
+        trading_pair_in_question = self.get_trading_pair(name=name)
+        print (trading_pair_in_question)
+        trading_pair_in_question.favourited_by.add(request.user.id)
+        trading_pair_in_question.save()
+        serialized_favourited_trading_pair = PopulatedTradingPairSerializer(trading_pair_in_question)
+        return Response(serialized_favourited_trading_pair.data, status=status.HTTP_201_CREATED)

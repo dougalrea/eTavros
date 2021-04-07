@@ -3,7 +3,7 @@ import React from 'react'
 // import * as SockJS from 'sockjs-client'
 import { createChart, CrosshairMode } from 'lightweight-charts'
 import { useParams } from 'react-router-dom'
-import { getOneTradingPair, getHistoricalData, get24HourData, createComment, getUserProfile } from '../../lib/api'
+import { getOneTradingPair, getHistoricalData, get24HourData, createComment, getUserProfile, favouriteCoin } from '../../lib/api'
 import useForm from '../utils/useForm'
 import { 
   ChakraProvider, 
@@ -33,7 +33,7 @@ import {
   Radio,
   RadioGroup
 } from '@chakra-ui/react'
-import { ChatIcon, ChevronDownIcon, EditIcon } from '@chakra-ui/icons'
+import { ChatIcon, ChevronDownIcon, EditIcon, StarIcon } from '@chakra-ui/icons'
 import { getPayload, getToken } from '../../lib/auth'
 import FormTrade from './FormTrade'
 
@@ -41,9 +41,10 @@ function TradingPairShow() {
   const [tradingPair, setTradingPair] = React.useState(undefined)
   const [lastDayData, setLastDayData] = React.useState(undefined)
   const [interval, setInterval] = React.useState('5m')
-  const [commentTicker, setCommentTicker] = React.useState(false)
   const [userData, setUserData] = React.useState(undefined)
 
+  const [userDataFound, setUserDataFound] = React.useState(false)
+  const [tradingPairDataFound, setTradingPairDataFound] = React.useState(false)
   const [chartHasGenerated, setChartHasGenerated] = React.useState(false)
   const [historicalCandleDataHasBeenFetched, setHistoricalCandleDataHasBeenFetched] = React.useState(false)
   const [webSocketHasBeenAssigned, setWebSocketHasBeenAssigned] = React.useState(false)
@@ -58,16 +59,30 @@ function TradingPairShow() {
   const ref = React.useRef()
   const commentsEndRef = React.useRef()
 
-  React.useEffect(() => {
-    const scrollToBottomComments = () => {
-      commentsEndRef.current?.scrollIntoView({ behaviour: 'smooth' })
-    }
-    scrollToBottomComments()
-  }, [tradingPair])
-
   const { formdata, handleChange, setFormdata } = useForm({
     text: ''
   })
+
+  const getUserData = async () => {
+    try {
+      const token = getToken()
+      const { data } = await getUserProfile(token)
+      setUserData(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleFavourite = async () => {
+    try {
+      const token = getToken()
+      await favouriteCoin(name, token)
+      setTradingPairDataFound(false)
+      setWebSocketHasBeenAssigned(false)
+    } catch (error) {
+      console.log('error favouriting coin: ', error)
+    }
+  }
 
   const handleComment = async (e) => {
     e.preventDefault()
@@ -82,7 +97,9 @@ function TradingPairShow() {
           'trading_pair': tradingPair.id
         }
       )
-      setCommentTicker(!commentTicker)
+      setTradingPairDataFound(false)
+      setWebSocketHasBeenAssigned(false)
+      dayVolumeTicker ++
     } catch (err) {
       console.log(err)
     }
@@ -94,29 +111,24 @@ function TradingPairShow() {
     return numParts.join('.')
   }
 
-  React.useEffect(() => {
+  const getTradingPairData = async () => {
+    try {
+      const { data } = await getOneTradingPair(name)
+      setTradingPair(data)
+    } catch (error) {
+      console.log('Error retrieving trading pair data from django: ', error)
+    }
+  }
 
-    const getTradingPairData = async () => {
-      try {
-        const { data } = await getOneTradingPair(name)
-        setTradingPair(data)
-        console.log('trading pair data found')
-      } catch (error) {
-        console.log('Error retrieving trading pair data from django: ', error)
-      }
+  React.useEffect(() => {
+    const scrollToBottomComments = () => {
+      commentsEndRef.current?.scrollIntoView({ behaviour: 'smooth' })
     }
-    const token = getToken()
-    const getUserData = async () => {
-      try {
-        const { data } = await getUserProfile(token)
-        setUserData(data)
-      } catch (error) {
-        console.log(error)
-      }
+    if (tradingPairDataFound && tradingPair) {
+      scrollToBottomComments()
+      console.log('scrolling to bottom of comments')
     }
-    getUserData()
-    getTradingPairData()
-  }, [name, commentTicker])
+  }, [tradingPairDataFound, tradingPair])
 
   React.useEffect(() => {
 
@@ -154,14 +166,12 @@ function TradingPairShow() {
         wickDownColor: '#de283d',
         wickUpColor: '#0dd410'
       }))
-      console.log('chart has been generated')
     }
 
     const getHistoricalKline = async () => {
       try {
         const { data } = await getHistoricalData(name, interval)
         candleSeries.setData(data)
-        console.log('historical candlestick data successfully set')
       } catch (error) {
         console.log('Error retrieving candleSeries data from binance API: ', error)
       }
@@ -169,8 +179,14 @@ function TradingPairShow() {
 
     const getLiveCandlestickUpdates = () => {
       socketRef.current = new WebSocket(`wss://stream.binance.com:9443/ws/${tradingPair.ticker.toString().toLowerCase()}busd@kline_${interval}`)
-      socketRef.current.onopen = e => {
+      socketRef.current.onopen = async e => {
         console.log('websocket connected', e)
+        try {
+          const { data } = await get24HourData(name)
+          setLastDayData(data)
+        } catch {
+          console.log('could not fetch volume data')
+        }
       }
       socketRef.current.onmessage = async (event) => {
         const message = JSON.parse(event?.data)
@@ -183,7 +199,7 @@ function TradingPairShow() {
             low: candlestick.l,
             close: candlestick.c
           })
-          if (dayVolumeTicker % 2 === 0 && dayVolumeTicker < 38) {
+          if (dayVolumeTicker % 2 === 0) {
             try {
               const { data } = await get24HourData(name)
               setLastDayData(data)
@@ -199,22 +215,47 @@ function TradingPairShow() {
       }
     }
 
+    if (!userDataFound) {
+      getUserData()
+      console.log('user data found')
+      setUserDataFound(true)
+    }
+
+    if (!tradingPairDataFound) {
+      getTradingPairData()
+      console.log('trading pair data found')
+      setTradingPairDataFound(true)
+    }
+
     if (!chartHasGenerated) {
       generateChart()
-      return setChartHasGenerated(true)
+      console.log('chart has been generated')
+      setChartHasGenerated(true)
     }
 
     if (chartHasGenerated && candleSeries && !historicalCandleDataHasBeenFetched) {
       getHistoricalKline()
-      return setHistoricalCandleDataHasBeenFetched(true)
+      console.log('historical candlestick data successfully set')
+      console.log('historicalCandleDataHasBeenFetched: ', historicalCandleDataHasBeenFetched)
+      console.log('websocket has been assigned: ', webSocketHasBeenAssigned)
+      setHistoricalCandleDataHasBeenFetched(true)
     }
 
     if (historicalCandleDataHasBeenFetched && tradingPair && !webSocketHasBeenAssigned) {
+      console.log('trying to connect websocket')
       getLiveCandlestickUpdates()
-      return setWebSocketHasBeenAssigned(true)
+      setWebSocketHasBeenAssigned(true)
     }
 
-  }, [interval, tradingPair, chartHasGenerated, historicalCandleDataHasBeenFetched, webSocketHasBeenAssigned])
+    return function cleaup() {
+      console.log('trying to cleanup the trading page')
+      if (socketRef.current) {
+        console.log('Closing the Web Socket... Bye!')
+        socketRef.current.close()
+      }
+    }
+
+  }, [interval, userDataFound, tradingPair, tradingPairDataFound, chartHasGenerated, historicalCandleDataHasBeenFetched, name])
 
   return (
     <>
@@ -283,7 +324,7 @@ function TradingPairShow() {
                         >1 minute
                         </MenuItemOption>
                         <MenuItemOption 
-                          value='15m' 
+                          value='15m'
                           onClick={() => {
                             setInterval('15m')
                             setHistoricalCandleDataHasBeenFetched(false)
@@ -332,10 +373,34 @@ function TradingPairShow() {
             </GridItem>
             <GridItem rowStart={1} rowEnd={3} colStart={4} colEnd={5} p={2} pt={0} bg='gray.400' overflow='scroll' boxShadow='dark-lg' rounded='lg'>
               <Box>
-                <Heading fontSize='xl' color='gray.800' textAlign='center' fontWeight='medium' mb={5}>
-                  Favourited By:
-                </Heading>
-                {tradingPair ? 
+                <Flex>
+                  <Heading mt={2} fontSize='xl' color='gray.800' textAlign='center' fontWeight='medium' mb={3}>
+                  Favourited by:
+                  </Heading>
+                  <Spacer />
+                  {userData && tradingPair ? 
+                    <Button
+                      onClick={() => {
+                        handleFavourite()
+                      }}
+                      alignSelf='center'
+                      align='right'
+                      variant='solid' 
+                      bg='gray.700'
+                      color='gray.100'
+                      boxShadow='sm'
+                      _hover={{ boxShadow: 'md', bg: 'gray.800', color: 'white' }}
+                    >
+                      <StarIcon mr={3} />
+                      Favourite
+                    </Button>
+                    :
+                    ''}
+                  
+                </Flex>
+                
+                
+                {tradingPair?.favourited_by?.length ? 
                   <Wrap >
                     {tradingPair.favourited_by.map(user => {
                       return (
@@ -345,7 +410,7 @@ function TradingPairShow() {
                       )
                     })}
                   </Wrap>
-                  : 'data loading'}
+                  : 'Nobody has favourited this coin yet... Sounds like a buying opportunity to me!'}
               </Box>
             </GridItem>
             <GridItem rowStart={3} rowEnd={12} colStart={1} colEnd={2} borderRadius='lg' bg='gray.400' boxShadow='2xl' rounded='lg' overflow='scroll'>
@@ -355,7 +420,7 @@ function TradingPairShow() {
                 </Heading>
                 {tradingPair ? 
                   <Stack spacing={3}>
-                    {tradingPair.comments.map(comment => {
+                    {tradingPair.comments?.map(comment => {
                       return (
                         <Flex key={comment.id}>
                           {comment.owner.id === getPayload().sub ?
@@ -445,7 +510,6 @@ function TradingPairShow() {
                       bg='gray.700'
                       color='gray.200'
                       minH={window.innerHeight / 9}
-                      // onFocus={handleFocus}
                       onChange={handleChange}
                       value={formdata.text}
                       placeholder={'Join the conversation'}

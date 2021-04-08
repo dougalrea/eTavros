@@ -73,7 +73,7 @@ export function favouriteCoin(name, token) {
 }
 
 export function unfavouriteCoin(name, token) {
-  return axios.delete(`${baseUrl}/markets/${name}/favourite/`, name, {
+  return axios.put(`${baseUrl}/markets/${name}/favourite/`, name, {
     headers: {
       Authorization: `Bearer ${token}`
     }

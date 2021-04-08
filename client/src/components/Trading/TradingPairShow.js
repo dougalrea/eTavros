@@ -3,7 +3,7 @@ import React from 'react'
 // import * as SockJS from 'sockjs-client'
 import { createChart, CrosshairMode } from 'lightweight-charts'
 import { useParams } from 'react-router-dom'
-import { getOneTradingPair, getHistoricalData, get24HourData, createComment, getUserProfile, favouriteCoin } from '../../lib/api'
+import { getOneTradingPair, getHistoricalData, get24HourData, createComment, getUserProfile, favouriteCoin, unfavouriteCoin } from '../../lib/api'
 import useForm from '../utils/useForm'
 import { 
   ChakraProvider, 
@@ -20,8 +20,6 @@ import {
   Center,
   Flex,
   Avatar,
-  WrapItem,
-  Wrap,
   Text,
   Spacer,
   Heading,
@@ -31,9 +29,11 @@ import {
   InputLeftElement,
   Textarea,
   Radio,
-  RadioGroup
+  RadioGroup,
+  Icon
 } from '@chakra-ui/react'
-import { ChatIcon, ChevronDownIcon, EditIcon, StarIcon } from '@chakra-ui/icons'
+import { ChatIcon, ChevronDownIcon, EditIcon } from '@chakra-ui/icons'
+import { BsStar, BsStarFill } from 'react-icons/bs'
 import { getPayload, getToken } from '../../lib/auth'
 import FormTrade from './FormTrade'
 
@@ -76,7 +76,11 @@ function TradingPairShow() {
   const handleFavourite = async () => {
     try {
       const token = getToken()
-      await favouriteCoin(name, token)
+      if (tradingPair.favourited_by.some(user => user.id === userData.id)) {
+        await unfavouriteCoin(name, token)
+      } else {
+        await favouriteCoin(name, token)
+      }
       setTradingPairDataFound(false)
       setWebSocketHasBeenAssigned(false)
     } catch (error) {
@@ -270,11 +274,11 @@ function TradingPairShow() {
             templateColumns="repeat(4, 1fr)"
             gap={4}
           >
-            <GridItem rowStart={1} rowEnd={3} colStart={1} colEnd={2} p={2} pt={0} bg='gray.400' overflow='scroll' boxShadow='dark-lg' rounded='lg'>
+            <GridItem rowStart={1} rowEnd={3} colStart={1} colEnd={2} borderRadius='lg' bg='gray.400' boxShadow='dark-lg' rounded='lg' overflow='scroll'>
               <Box>
                 {tradingPair ?
                   <>
-                    <Heading fontSize='xl' color='gray.800' fontWeight='medium'>
+                    <Heading fontSize='xl' color='gray.100' bg='gray.700' textAlign='center' fontWeight='medium' mb={2}>
                       About {tradingPair.name}
                     </Heading>
                     <Text fontSize='sm' color='gray.800'>
@@ -371,52 +375,60 @@ function TradingPairShow() {
                   <Box ref={ref}></Box>
                 </Center> : <p>loading chart</p>}
             </GridItem>
-            <GridItem rowStart={1} rowEnd={3} colStart={4} colEnd={5} p={2} pt={0} bg='gray.400' overflow='scroll' boxShadow='dark-lg' rounded='lg'>
+            <GridItem rowStart={1} rowEnd={3} colStart={4} colEnd={5} borderRadius='lg' bg='gray.400' boxShadow='dark-lg' rounded='lg' overflow='scroll'>
               <Box>
-                <Flex>
-                  <Heading mt={2} fontSize='xl' color='gray.800' textAlign='center' fontWeight='medium' mb={3}>
-                  Favourited by:
-                  </Heading>
-                  <Spacer />
+                <Heading fontSize='xl' color='gray.100' bg='gray.700' textAlign='center' fontWeight='medium' mb={5}>
+                  Favourited By
+                </Heading>
+                <Stack direction='row'>
                   {userData && tradingPair ? 
-                    <Button
-                      onClick={() => {
-                        handleFavourite()
-                      }}
-                      alignSelf='center'
-                      align='right'
-                      variant='solid' 
-                      bg='gray.700'
-                      color='gray.100'
-                      boxShadow='sm'
-                      _hover={{ boxShadow: 'md', bg: 'gray.800', color: 'white' }}
-                    >
-                      <StarIcon mr={3} />
-                      Favourite
-                    </Button>
+                    <>
+                      {tradingPair.favourited_by.some(user => user.id === userData.id) ? 
+                        <Center 
+                          borderRadius='md'
+                          fontSize='xx-large'
+                          ml={2}
+                          p={2}
+                          bg='gray.400'
+                          color='gray.700'
+                          boxShadow='sm'
+                          _hover={{ boxShadow: 'md', bg: 'gray.500', color: 'gray.700' }}
+                          onClick={() => handleFavourite()}>
+                          <Icon as={BsStarFill}/> 
+                        </Center>
+                        : 
+                        <Center 
+                          borderRadius='md'
+                          ml={2}
+                          p={2}
+                          fontSize='xx-large'
+                          bg='gray.400'
+                          color='gray.700'
+                          boxShadow='sm'
+                          _hover={{ boxShadow: 'md', bg: 'gray.500', color: 'gray.700' }}
+                          onClick={() => handleFavourite()}>
+                          <Icon as={BsStar}/> 
+                        </Center>
+                      }
+                    </>
                     :
                     ''}
-                  
-                </Flex>
-                
-                
-                {tradingPair?.favourited_by?.length ? 
-                  <Wrap >
-                    {tradingPair.favourited_by.map(user => {
-                      return (
-                        <WrapItem mt={0} key={user.id}>
-                          <Avatar size='md' src={user.profile_image} />
-                        </WrapItem>
-                      )
-                    })}
-                  </Wrap>
-                  : 'Nobody has favourited this coin yet... Sounds like a buying opportunity to me!'}
+                  {tradingPair?.favourited_by?.length ?
+                    <>
+                      {tradingPair.favourited_by.map(user => {
+                        return (
+                          <Avatar key={user.id} size='md' src={user.profile_image} />
+                        )
+                      })}
+                    </>
+                    : 'Nobody has favourited this coin yet... Sounds like a buying opportunity to me!'}
+                </Stack>
               </Box>
             </GridItem>
             <GridItem rowStart={3} rowEnd={12} colStart={1} colEnd={2} borderRadius='lg' bg='gray.400' boxShadow='2xl' rounded='lg' overflow='scroll'>
               <Box>
-                <Heading fontSize='xl' color='gray.800' textAlign='center' fontWeight='medium' mb={5}>
-                  Sentiment:
+                <Heading fontSize='xl' color='gray.100' bg='gray.700' textAlign='center' fontWeight='medium' mb={5}>
+                  Sentiment
                 </Heading>
                 {tradingPair ? 
                   <Stack spacing={3}>
@@ -531,26 +543,28 @@ function TradingPairShow() {
                 borderRadius='lg'>
                 <GridItem rowSpan={6} colSpan={1}>
                   <FormTrade 
-                    setTradingPair={setTradingPair}
+                    setTradingPairDataFound={setTradingPairDataFound}
+                    setWebSocketHasBeenAssigned={setWebSocketHasBeenAssigned}
+                    tradingPair={tradingPair}
                     userData={userData}
                     setUserData={setUserData}
-                    tradingPair={tradingPair} 
                     orderType='Buy'></FormTrade>
                 </GridItem>
                 <GridItem rowSpan={6} colSpan={1}>
                   <FormTrade 
-                    setTradingPair={setTradingPair}
+                    setTradingPairDataFound={setTradingPairDataFound}
+                    setWebSocketHasBeenAssigned={setWebSocketHasBeenAssigned}
+                    tradingPair={tradingPair}
                     setUserData={setUserData}
                     userData={userData} 
-                    tradingPair={tradingPair} 
                     orderType='Sell'></FormTrade>
                 </GridItem>           
               </Grid>
             </GridItem>
             <GridItem rowStart={3} rowEnd={15} colStart={4} colEnd={4} borderRadius='lg' borderColor='tomato' bg='gray.400' overflow='scroll'>
               <Box>
-                <Heading fontSize='xl' color='gray.800' textAlign='center' fontWeight='medium' mb={5}>
-                  Recent trades:
+                <Heading fontSize='xl' color='gray.100' bg='gray.700' textAlign='center' fontWeight='medium' mb={5}>
+                  Recent Trades
                 </Heading>
                 <Stack spacing={3}>
                   {tradingPair?.trade_posts.map(post => {

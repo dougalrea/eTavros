@@ -131,8 +131,14 @@ class TradingPairFavourite(TradingPairDetailView):
     
     def post(self, request, name):
         trading_pair_in_question = self.get_trading_pair(name=name)
-        print (trading_pair_in_question)
         trading_pair_in_question.favourited_by.add(request.user.id)
         trading_pair_in_question.save()
         serialized_favourited_trading_pair = PopulatedTradingPairSerializer(trading_pair_in_question)
         return Response(serialized_favourited_trading_pair.data, status=status.HTTP_201_CREATED)
+      
+    def put(self, request, name):
+        trading_pair_in_question = self.get_trading_pair(name=name)
+        trading_pair_in_question.favourited_by.remove(request.user.id)
+        trading_pair_in_question.save()
+        serialized_unfavourited_trading_pair = PopulatedTradingPairSerializer(trading_pair_in_question)
+        return Response(serialized_unfavourited_trading_pair.data, status=status.HTTP_204_NO_CONTENT)

@@ -1,19 +1,35 @@
-import { Box, ChakraProvider, Container, Grid, GridItem, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
+import { Box, ChakraProvider, Container, Grid, GridItem, Heading, Stack, Tab, TabList, TabPanel, TabPanels, Tabs, Text } from '@chakra-ui/react'
 import React from 'react'
-import { getAllTradingPairs } from '../../lib/api'
+import { getAllTradingPairs, getUserProfile } from '../../lib/api'
+import { getToken } from '../../lib/auth'
 import IndexCard from './IndexCard'
 
 function TradingPairsIndex() {
 
-  const [tradingPairData, setTradingPairData] = React.useState(null)
+  const [tradingPairData, setTradingPairData] = React.useState(undefined)
+  const [userData, setUserData] = React.useState(undefined)
 
-  React.useEffect( async () => {
-    try {
-      const { data } = await getAllTradingPairs()
-      setTradingPairData(data)
-    } catch (error) {
-      console.log(error)
+  React.useEffect(() => {
+    const getTradingPairData = async () => {
+      try {
+        const { data } = await getAllTradingPairs()
+        setTradingPairData(data)
+      } catch (error) {
+        console.log(error)
+      }
     }
+    
+    const getUserData = async () => {
+      try {
+        const token = getToken()
+        const { data } = await getUserProfile(token)
+        setUserData(data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getTradingPairData()
+    getUserData()
   }, [])
 
   return (
@@ -79,7 +95,56 @@ function TradingPairsIndex() {
                 'Loading markets'}
             </TabPanel>
             <TabPanel>
-              <p>two!</p>
+              <Box pb={4} pl={4} pr={4}>
+                <Grid templateColumns="repeat(20, 1fr)" gap={2} alignItems='center' color='gray.800'>
+                  <GridItem colStart={4} colEnd={6}>
+                    <Text fontSize='sm'>
+                      Current Price
+                    </Text>
+                  </GridItem>
+                  <GridItem colStart={6} colEnd={8}>
+                    <Text fontSize='sm'>
+                      24hr Change
+                    </Text>
+                  </GridItem>
+                  <GridItem colStart={8} colEnd={10}>
+                    <Text fontSize='sm'>
+                      24hr High
+                    </Text>
+                  </GridItem>
+                  <GridItem colStart={10} colEnd={12}>
+                    <Text fontSize='sm'>
+                      24hr Low
+                    </Text>
+                  </GridItem>
+                  <GridItem colStart={12} colEnd={15}>
+                    <Text fontSize='sm'>
+                      Market Capitalisation
+                    </Text>
+                  </GridItem>
+                  <GridItem colStart={15} colEnd={17}>
+                    <Text fontSize='sm'>
+                      24hr Volume
+                    </Text>
+                  </GridItem>
+                </Grid>
+              </Box>
+              {tradingPairData && userData ? 
+                <Stack spacing={1} >
+                  {tradingPairData.filter(tradingPair => tradingPair.favourited_by.includes(userData.id)).map(tradingPair => {
+                    return (
+                      <IndexCard key={tradingPair.id} tradingPair={tradingPair} ticker={tradingPair.ticker} />
+                    )
+                  }).sort(function(a, b) {
+                    return a.key - b.key
+                  })}
+              
+                </Stack>
+                :
+                <Heading color='red.500' fontSize='md' fontWeight='medium'>
+                  You must be logged in to view favourites!
+                </Heading>
+              }
             </TabPanel>
           </TabPanels>
         </Tabs>

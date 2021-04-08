@@ -20,11 +20,11 @@ import {
 import { FaWallet } from 'react-icons/fa'
 import React from 'react'
 import { getToken } from '../../lib/auth'
-import { createTradePost, get24HourData, getOneTradingPair, getUserProfile, performTrade } from '../../lib/api'
+import { createTradePost, get24HourData, getUserProfile, performTrade } from '../../lib/api'
 import { useParams } from 'react-router-dom'
 
 
-function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPair }) {
+function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPairDataFound, setWebSocketHasBeenAssigned }) {
   const [balanceChangeTicker, setBalanceChangeTicker] = React.useState(false)
   const [lastPrice, setLastPrice] = React.useState(null)
   const [error, setError] = React.useState(false)
@@ -60,15 +60,14 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
       console.log(error)
     }
   }
-  const getTradingPairData = async () => {
-    try {
-      const { data } = await getOneTradingPair(name)
-      setTradingPair(data)
-      console.log('trading pair data found')
-    } catch (error) {
-      console.log('Error retrieving trading pair data from django: ', error)
-    }
-  }
+  // const getTradingPairData = async () => {
+  //   try {
+  //     const { data } = await getOneTradingPair(name)
+  //     setTradingPair(data)
+  //   } catch (error) {
+  //     console.log('Error retrieving trading pair data from django: ', error)
+  //   }
+  // }
 
   const handleChange = (event) => {
     if (event.target.name === 'amount') {
@@ -134,8 +133,9 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
         'trading_pair': tradingPair.id
       }, token)
       triggerToast()
+      setTradingPairDataFound(false)
+      setWebSocketHasBeenAssigned(false)
       getUserData()
-      getTradingPairData()
       setError(false)
       setFormdata(initialState)
     } catch (error) {

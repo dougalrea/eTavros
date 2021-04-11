@@ -122,7 +122,7 @@ class TradingPair24hrData(APIView):
 
         trading_pair = self.get_trading_pair(name=name)
         
-        lastDayData = client.get_ticker(symbol=f'{trading_pair.ticker}USDT')
+        lastDayData = client.get_ticker(symbol=f'{trading_pair.ticker}BUSD')
         
         return JsonResponse(lastDayData, safe=False)
       

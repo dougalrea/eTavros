@@ -26,7 +26,7 @@ import FocusLock from 'react-focus-lock'
 import { FaWallet } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { getToken, logoutUser } from '../../lib/auth'
-import { getUserProfile } from '../../lib/api'
+import { get24HourData, getAllTradingPairs, getUserProfile } from '../../lib/api'
 
 function Nav() {
 
@@ -35,6 +35,13 @@ function Nav() {
   const [isOpenWallet, setIsOpenWallet] = React.useState(false)
 
   const [userData, setUserData] = React.useState(undefined)
+  const [tradingPairsArray, setTradingPairsArray] = React.useState([])
+  const [totalPortfolioValue, setTotalPortfolioValue] = React.useState(undefined)
+
+  let dollarValuesArray = []
+  let walletBalancesArray = []
+
+  const toast = useToast()
 
   const closeRegister = () => {
     setIsOpenRegister(false)
@@ -58,7 +65,40 @@ function Nav() {
     setIsOpenWallet(true)
   }
 
-  const toast = useToast()
+  const getTradingPairsArray = async () => {
+    try {
+      const { data } = await getAllTradingPairs()
+      setTradingPairsArray(data)
+    } catch (error) {
+      console.log('Error retrieving trading pairs array: ', error)
+    }
+  }
+
+  const getLastPrice = async (coin) => {
+    try {
+      const { data } = await get24HourData(coin)
+      dollarValuesArray.push({
+        ticker: data.symbol.split('BUSD').join('').toUpperCase(),
+        lastPrice: parseFloat(data.lastPrice)
+      })
+      if (dollarValuesArray.length === tradingPairsArray.length) {
+        dollarValuesArray.map(lastPriceObject => {
+          return multiplyLastPriceAndBalance(lastPriceObject)
+        })
+      }
+    } catch (error) {
+      console.log('Error retrieving latest price data: ', error)
+    }
+  }
+
+  const multiplyLastPriceAndBalance = (lastPriceObject) => {
+    const relevantCoin = tradingPairsArray.find(tradingPair => tradingPair.ticker.toUpperCase() === lastPriceObject.ticker).name
+    if (walletBalancesArray.length < 1) {
+      walletBalancesArray.push(parseFloat(userData.cash_balance))
+    }
+    walletBalancesArray.push(lastPriceObject.lastPrice * parseFloat(userData[`${relevantCoin}_balance`]))
+    setTotalPortfolioValue(walletBalancesArray.reduce((acc, curr) => acc + curr))
+  }
 
   const triggerToast = () => {
     toast({
@@ -74,7 +114,7 @@ function Nav() {
     if (num) {
       const numParts = num.toString().split('.')
       numParts[0] = numParts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-      return numParts.join('.')  
+      return numParts.join('.')
     }
   }
 
@@ -89,9 +129,7 @@ function Nav() {
   }
 
   const toggleIsOpenLogin = () => {
-    console.log('trying')
     setIsOpenLogin(!isOpenLogin)
-    console.log(isOpenLogin)
   }
 
   const handleLogout = () => {
@@ -102,7 +140,19 @@ function Nav() {
 
   React.useEffect(() => {
     getUserData()
+    getTradingPairsArray()
   }, [])
+
+  React.useEffect(() => {
+
+    dollarValuesArray = []
+    walletBalancesArray = []
+
+    tradingPairsArray.map(tradingPair => {
+      return getLastPrice(tradingPair.name)
+    })
+    
+  }, [tradingPairsArray, userData])
 
   return (
     <>
@@ -137,9 +187,25 @@ function Nav() {
                           My Wallet
                       </Text>
                       <Text>{userData.username}</Text>
+
                     </Flex>
                   </DrawerHeader>
                   <DrawerBody fontSize='xl' color='gray.800'>
+                    {totalPortfolioValue && userData ?
+                      <Flex justify='space-between'>
+                        <Text>
+                        Total value ($)
+                        </Text>
+                        <Text>
+                          {
+                            thousandsSeparators(totalPortfolioValue.toFixed(2))
+                          }
+                        </Text>
+                      </Flex>
+                      :
+                      ''
+                    }
+                    <Divider mb={4} mt={4}/>
                     <Flex justify='space-between'>
                       <Text>
                         Virtual USD
@@ -148,105 +214,29 @@ function Nav() {
                         ${thousandsSeparators(userData.cash_balance)}
                       </Text>
                     </Flex>
-                    <Divider p={4}/>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Bitcoin
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.bitcoin_balance) ? userData.bitcoin_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Ethereum
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.ethereum_balance) ? userData.ethereum_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Cardano
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.cardano_balance) ? userData.cardano_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Polkadot
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.polkadot_balance) ? userData.polkadot_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Litecoin
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.litecoin_balance) ? userData.litecoin_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Stellar
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.stellar_balance) ? userData.stellar_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Dogecoin
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.dogecoin_balance) ? userData.dogecoin_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Terra
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.terra_balance) ? userData.terra_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        VeChain
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.veChain_balance) ? userData.veChain_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Monero
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.monero_balance) ? userData.monero_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        EOS
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.EOS_balance) ? userData.EOS_balance : '-'}
-                      </Text>
-                    </Flex>
-                    <Flex justify='space-between'>
-                      <Text>
-                        Neo
-                      </Text>
-                      <Text>
-                        {parseFloat(userData.neo_balance) ? userData.neo_balance : '-'}
-                      </Text>
-                    </Flex>
+                    <Divider mb={4} mt={4}/>
+                    {tradingPairsArray ?
+                      tradingPairsArray.sort(function(a, b) {
+                        return a.id - b.id
+                      }).map(tradingPair => {
+                        return (
+                          <Flex justify='space-between' key={tradingPair.id}>
+                            <Text>
+                              {tradingPair.name.split('')[0].toUpperCase()}{tradingPair.name.slice(1)}
+                            </Text>
+                            <Text>
+                              {parseFloat(userData[`${tradingPair?.name}_balance`]) ? 
+                                thousandsSeparators(userData[`${tradingPair?.name}_balance`])
+                                :
+                                '-'
+                              }
+                            </Text>
+                          </Flex>
+                        )
+                      })
+                      :
+                      ''}
                     <Spacer />
-
                   </DrawerBody>
                 </DrawerContent>
               </Drawer>

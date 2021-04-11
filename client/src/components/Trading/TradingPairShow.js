@@ -1,9 +1,8 @@
 /* eslint-disable react/no-children-prop */
 import React from 'react'
 // import * as SockJS from 'sockjs-client'
-import { createChart, CrosshairMode } from 'lightweight-charts'
 import { useParams } from 'react-router-dom'
-import { getOneTradingPair, getHistoricalData, get24HourData, createComment, getUserProfile, favouriteCoin, unfavouriteCoin } from '../../lib/api'
+import { getOneTradingPair, createComment, getUserProfile, favouriteCoin, unfavouriteCoin } from '../../lib/api'
 import useForm from '../utils/useForm'
 import { 
   ChakraProvider, 
@@ -19,6 +18,7 @@ import {
   Container,
   Center,
   Flex,
+  useToast,
   Avatar,
   Text,
   Spacer,
@@ -36,29 +36,19 @@ import { ChatIcon, ChevronDownIcon, EditIcon } from '@chakra-ui/icons'
 import { BsStar, BsStarFill } from 'react-icons/bs'
 import { getPayload, getToken } from '../../lib/auth'
 import FormTrade from './FormTrade'
+import Chart from './Chart'
 
 function TradingPairShow() {
   const [tradingPair, setTradingPair] = React.useState(undefined)
   const [lastDayData, setLastDayData] = React.useState(undefined)
   const [interval, setInterval] = React.useState('5m')
   const [userData, setUserData] = React.useState(undefined)
-
   const [userDataFound, setUserDataFound] = React.useState(false)
   const [tradingPairDataFound, setTradingPairDataFound] = React.useState(false)
-  const [chartHasGenerated, setChartHasGenerated] = React.useState(false)
-  const [historicalCandleDataHasBeenFetched, setHistoricalCandleDataHasBeenFetched] = React.useState(false)
-  const [webSocketHasBeenAssigned, setWebSocketHasBeenAssigned] = React.useState(false)
-
-  let chart = undefined
-  let dayVolumeTicker = 0
-  const [candleSeries, setCandleSeries] = React.useState(undefined)
-
-  const { name } = useParams()
   
-  const socketRef = React.useRef()
-  const ref = React.useRef()
   const commentsEndRef = React.useRef()
-
+  const { name } = useParams()
+  const toast = useToast()
   const { formdata, handleChange, setFormdata } = useForm({
     text: ''
   })
@@ -78,11 +68,25 @@ function TradingPairShow() {
       const token = getToken()
       if (tradingPair.favourited_by.some(user => user.id === userData.id)) {
         await unfavouriteCoin(name, token)
+        toast({
+          title: 'Unfavourited!',
+          description: 'Nevermind, plenty more blocks in the chain',
+          status: 'warning',
+          duration: 4200,
+          isClosable: true
+        })
       } else {
         await favouriteCoin(name, token)
+        toast({
+          title: 'Favourited!',
+          description: 'Access this coin faster from your Favourites tab',
+          status: 'success',
+          duration: 4200,
+          isClosable: true
+        })
       }
       setTradingPairDataFound(false)
-      setWebSocketHasBeenAssigned(false)
+      
     } catch (error) {
       console.log('error favouriting coin: ', error)
     }
@@ -102,8 +106,6 @@ function TradingPairShow() {
         }
       )
       setTradingPairDataFound(false)
-      setWebSocketHasBeenAssigned(false)
-      dayVolumeTicker ++
     } catch (err) {
       console.log(err)
     }
@@ -135,90 +137,6 @@ function TradingPairShow() {
   }, [tradingPairDataFound, tradingPair])
 
   React.useEffect(() => {
-
-    const generateChart = async () => {
-      chart = createChart(ref.current, {
-        width: window.innerWidth / 2 - 16,
-        height: ((window.innerHeight - 70) / 2.15),
-        layout: {
-          backgroundColor: '#2D3748',
-          textColor: '#EDF2F7'
-        },
-        grid: {
-          vertLines: {
-            color: 'rgba(197, 203, 206, 0.5)'
-          },
-          horzLines: {
-            color: 'rgba(197, 203, 206, 0.5)'
-          }
-        },
-        crosshair: {
-          mode: CrosshairMode.Normal
-        },
-        rightPriceScale: {
-          borderColor: 'rgba(197, 203, 206, 0.8)'
-        },
-        timeScale: {
-          borderColor: 'rgba(197, 203, 206, 0.8)'
-        }
-      })
-      setCandleSeries(chart.addCandlestickSeries({
-        upColor: '#0dd410',
-        downColor: '#de283d',
-        borderDownColor: '#de283d',
-        borderUpColor: '#0dd410',
-        wickDownColor: '#de283d',
-        wickUpColor: '#0dd410'
-      }))
-    }
-
-    const getHistoricalKline = async () => {
-      try {
-        const { data } = await getHistoricalData(name, interval)
-        candleSeries.setData(data)
-      } catch (error) {
-        console.log('Error retrieving candleSeries data from binance API: ', error)
-      }
-    }
-
-    const getLiveCandlestickUpdates = () => {
-      socketRef.current = new WebSocket(`wss://stream.binance.com:9443/ws/${tradingPair.ticker.toString().toLowerCase()}busd@kline_${interval}`)
-      socketRef.current.onopen = async e => {
-        console.log('websocket connected', e)
-        try {
-          const { data } = await get24HourData(name)
-          setLastDayData(data)
-        } catch {
-          console.log('could not fetch volume data')
-        }
-      }
-      socketRef.current.onmessage = async (event) => {
-        const message = JSON.parse(event?.data)
-        const candlestick = message.k
-        if (candleSeries.ed.dd.H_[candleSeries.ed.dd.H_.length - 1] && candlestick.t / 1000 >= candleSeries.ed.dd.H_[candleSeries.ed.dd.H_.length - 1].P.Cs) {
-          candleSeries.update({
-            time: candlestick.t / 1000,
-            open: candlestick.o,
-            high: candlestick.h,
-            low: candlestick.l,
-            close: candlestick.c
-          })
-          if (dayVolumeTicker % 2 === 0) {
-            try {
-              const { data } = await get24HourData(name)
-              setLastDayData(data)
-              dayVolumeTicker ++
-              console.log('24 hr data found: ', dayVolumeTicker)
-            } catch (error) {
-              console.log('Error retrieving 24 hr data: ', error)
-            }
-          } else {
-            dayVolumeTicker ++
-          }
-        }
-      }
-    }
-
     if (!userDataFound) {
       getUserData()
       console.log('user data found')
@@ -230,36 +148,7 @@ function TradingPairShow() {
       console.log('trading pair data found')
       setTradingPairDataFound(true)
     }
-
-    if (!chartHasGenerated) {
-      generateChart()
-      console.log('chart has been generated')
-      setChartHasGenerated(true)
-    }
-
-    if (chartHasGenerated && candleSeries && !historicalCandleDataHasBeenFetched) {
-      getHistoricalKline()
-      console.log('historical candlestick data successfully set')
-      console.log('historicalCandleDataHasBeenFetched: ', historicalCandleDataHasBeenFetched)
-      console.log('websocket has been assigned: ', webSocketHasBeenAssigned)
-      setHistoricalCandleDataHasBeenFetched(true)
-    }
-
-    if (historicalCandleDataHasBeenFetched && tradingPair && !webSocketHasBeenAssigned) {
-      console.log('trying to connect websocket')
-      getLiveCandlestickUpdates()
-      setWebSocketHasBeenAssigned(true)
-    }
-
-    return function cleaup() {
-      console.log('trying to cleanup the trading page')
-      if (socketRef.current) {
-        console.log('Closing the Web Socket... Bye!')
-        socketRef.current.close()
-      }
-    }
-
-  }, [interval, userDataFound, tradingPair, tradingPairDataFound, chartHasGenerated, historicalCandleDataHasBeenFetched, name])
+  }, [tradingPairDataFound])
 
   return (
     <>
@@ -322,8 +211,6 @@ function TradingPairShow() {
                           value='1m' 
                           onClick={() => {
                             setInterval('1m')
-                            setHistoricalCandleDataHasBeenFetched(false)
-                            setWebSocketHasBeenAssigned(false)
                           }}
                         >1 minute
                         </MenuItemOption>
@@ -331,8 +218,6 @@ function TradingPairShow() {
                           value='15m'
                           onClick={() => {
                             setInterval('15m')
-                            setHistoricalCandleDataHasBeenFetched(false)
-                            setWebSocketHasBeenAssigned(false)
                           }}
                         >15 minutes
                         </MenuItemOption>
@@ -340,8 +225,6 @@ function TradingPairShow() {
                           value='30m' 
                           onClick={() => {
                             setInterval('30m')
-                            setHistoricalCandleDataHasBeenFetched(false)
-                            setWebSocketHasBeenAssigned(false)
                           }}
                         >30 minutes
                         </MenuItemOption>
@@ -349,8 +232,6 @@ function TradingPairShow() {
                           value='1h' 
                           onClick={() => {
                             setInterval('1h')
-                            setHistoricalCandleDataHasBeenFetched(false)
-                            setWebSocketHasBeenAssigned(false)
                           }}
                         >1 hour
                         </MenuItemOption>
@@ -358,8 +239,6 @@ function TradingPairShow() {
                           value='4h'
                           onClick={() => {
                             setInterval('4h')
-                            setHistoricalCandleDataHasBeenFetched(false)
-                            setWebSocketHasBeenAssigned(false)
                           }}
                         >4 hours
                         </MenuItemOption>
@@ -370,10 +249,7 @@ function TradingPairShow() {
               </Flex>     
             </GridItem>
             <GridItem rowStart={2} rowEnd={9} colStart={2} colEnd={4} borderRadius='lg' borderColor='gray.500' border='1px' overflow='hidden'>
-              {ref ? 
-                <Center>
-                  <Box ref={ref}></Box>
-                </Center> : <p>loading chart</p>}
+              <Chart tradingPair={tradingPair} interval={interval} setLastDayData={setLastDayData} />
             </GridItem>
             <GridItem rowStart={1} rowEnd={3} colStart={4} colEnd={5} borderRadius='lg' bg='gray.400' boxShadow='dark-lg' rounded='lg' overflow='scroll'>
               <Box>
@@ -543,18 +419,16 @@ function TradingPairShow() {
                 borderRadius='lg'>
                 <GridItem rowSpan={6} colSpan={1}>
                   <FormTrade 
-                    setTradingPairDataFound={setTradingPairDataFound}
-                    setWebSocketHasBeenAssigned={setWebSocketHasBeenAssigned}
                     tradingPair={tradingPair}
+                    setTradingPairDataFound={setTradingPairDataFound}
                     userData={userData}
                     setUserData={setUserData}
                     orderType='Buy'></FormTrade>
                 </GridItem>
                 <GridItem rowSpan={6} colSpan={1}>
                   <FormTrade 
-                    setTradingPairDataFound={setTradingPairDataFound}
-                    setWebSocketHasBeenAssigned={setWebSocketHasBeenAssigned}
                     tradingPair={tradingPair}
+                    setTradingPairDataFound={setTradingPairDataFound}
                     setUserData={setUserData}
                     userData={userData} 
                     orderType='Sell'></FormTrade>

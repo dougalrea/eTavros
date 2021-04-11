@@ -24,7 +24,7 @@ import { createTradePost, get24HourData, getUserProfile, performTrade } from '..
 import { useParams } from 'react-router-dom'
 
 
-function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPairDataFound, setWebSocketHasBeenAssigned }) {
+function FormTrade({ orderType, tradingPair, setTradingPairDataFound, userData, setUserData }) {
   const [balanceChangeTicker, setBalanceChangeTicker] = React.useState(false)
   const [lastPrice, setLastPrice] = React.useState(null)
   const [error, setError] = React.useState(false)
@@ -133,9 +133,8 @@ function FormTrade({ orderType, tradingPair, userData, setUserData, setTradingPa
         'trading_pair': tradingPair.id
       }, token)
       triggerToast()
-      setTradingPairDataFound(false)
-      setWebSocketHasBeenAssigned(false)
       getUserData()
+      setTradingPairDataFound(false)
       setError(false)
       setFormdata(initialState)
     } catch (error) {

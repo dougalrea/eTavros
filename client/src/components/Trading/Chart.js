@@ -53,6 +53,17 @@ function Chart({ interval, tradingPair, setLastDayData }) {
     }))
   }
 
+  const getLastDayData = async () => {
+    try {
+      const { data } = await get24HourData(name)
+      setLastDayData(data)
+      dayVolumeTicker ++
+      console.log('24 hr data found: ', dayVolumeTicker)
+    } catch (error) {
+      console.log('Error retrieving 24 hr data: ', error)
+    }
+  }
+
   const getHistoricalKline = async () => {
     try {
       const { data } = await getHistoricalData(name, interval)
@@ -83,14 +94,7 @@ function Chart({ interval, tradingPair, setLastDayData }) {
           close: candlestick.c
         })
         if (dayVolumeTicker % 2 === 0) {
-          try {
-            const { data } = await get24HourData(name)
-            setLastDayData(data)
-            dayVolumeTicker ++
-            console.log('24 hr data found: ', dayVolumeTicker)
-          } catch (error) {
-            console.log('Error retrieving 24 hr data: ', error)
-          }
+          getLastDayData()
         } else {
           dayVolumeTicker ++
         }
@@ -109,6 +113,7 @@ function Chart({ interval, tradingPair, setLastDayData }) {
 
     if (candleSeries && tradingPair) {
       getHistoricalKline()
+      getLastDayData()
       console.log('historical candlestick data successfully set')
       console.log('trying to connect websocket')
       getLiveCandlestickUpdates()

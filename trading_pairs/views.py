@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import datetime, time, timedelta
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -53,9 +53,30 @@ class TradingPairHistoricalData(APIView):
         client = Client(API_KEY, API_SECRET)
 
         trading_pair = self.get_trading_pair(name=name)
+        
+        time_frame = request.headers['interval']
 
         now = datetime.now() + timedelta(days=1)
-        historic = datetime.now() - timedelta(days=1)
+        
+        if time_frame == "2h":
+            historic = datetime.now() - timedelta(days=85)
+        elif time_frame == "1m":
+            historic = datetime.now() - timedelta(days=1)
+        elif time_frame == "5m":
+            historic = datetime.now() - timedelta(days=2)
+        elif time_frame == "15m":
+            historic = datetime.now() - timedelta(days=12)
+        elif time_frame == "1h":
+            historic = datetime.now() - timedelta(days=55)
+        elif time_frame == "4h":
+            historic = datetime.now() - timedelta(days=200)
+        elif time_frame == "8h":
+            historic = datetime.now() - timedelta(days=800)
+        elif time_frame == "1d":
+            historic = datetime.now() - timedelta(days=2000)
+        else:
+            historic = datetime.now() - timedelta(days=1)
+            
 
         now_month = now.strftime("%b")       
         now_day = now.strftime("%d")
@@ -64,8 +85,6 @@ class TradingPairHistoricalData(APIView):
         historic_month = historic.strftime("%b")       
         historic_day = historic.strftime("%d")
         historic_year = historic.strftime("%Y")
-        
-        time_frame = request.headers['interval']
         
         def kline_arg(time_frame):
             switcher={

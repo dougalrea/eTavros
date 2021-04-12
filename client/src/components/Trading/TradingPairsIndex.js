@@ -50,32 +50,32 @@ function TradingPairsIndex() {
               <Box pb={4} pl={4} pr={4}>
                 <Grid templateColumns="repeat(20, 1fr)" gap={2} alignItems='center' color='gray.800'>
                   <GridItem colStart={4} colEnd={6}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       Current Price
                     </Text>
                   </GridItem>
                   <GridItem colStart={6} colEnd={8}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr Change
                     </Text>
                   </GridItem>
                   <GridItem colStart={8} colEnd={10}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr High
                     </Text>
                   </GridItem>
                   <GridItem colStart={10} colEnd={12}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr Low
                     </Text>
                   </GridItem>
                   <GridItem colStart={12} colEnd={15}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       Market Capitalisation
                     </Text>
                   </GridItem>
                   <GridItem colStart={15} colEnd={17}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr Volume
                     </Text>
                   </GridItem>
@@ -98,32 +98,32 @@ function TradingPairsIndex() {
               <Box pb={4} pl={4} pr={4}>
                 <Grid templateColumns="repeat(20, 1fr)" gap={2} alignItems='center' color='gray.800'>
                   <GridItem colStart={4} colEnd={6}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       Current Price
                     </Text>
                   </GridItem>
                   <GridItem colStart={6} colEnd={8}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr Change
                     </Text>
                   </GridItem>
                   <GridItem colStart={8} colEnd={10}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr High
                     </Text>
                   </GridItem>
                   <GridItem colStart={10} colEnd={12}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr Low
                     </Text>
                   </GridItem>
                   <GridItem colStart={12} colEnd={15}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       Market Capitalisation
                     </Text>
                   </GridItem>
                   <GridItem colStart={15} colEnd={17}>
-                    <Text fontSize='sm'>
+                    <Text fontSize='md'>
                       24hr Volume
                     </Text>
                   </GridItem>

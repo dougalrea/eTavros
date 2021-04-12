@@ -41,7 +41,7 @@ import Chart from './Chart'
 function TradingPairShow() {
   const [tradingPair, setTradingPair] = React.useState(undefined)
   const [lastDayData, setLastDayData] = React.useState(undefined)
-  const [interval, setInterval] = React.useState('5m')
+  const [interval, setInterval] = React.useState('2h')
   const [userData, setUserData] = React.useState(undefined)
   const [userDataFound, setUserDataFound] = React.useState(false)
   const [tradingPairDataFound, setTradingPairDataFound] = React.useState(false)
@@ -161,7 +161,7 @@ function TradingPairShow() {
             maxH='91vh'
             templateRows="repeat(14, 1fr)"
             templateColumns="repeat(4, 1fr)"
-            gap={4}
+            gap={3}
           >
             <GridItem rowStart={1} rowEnd={3} colStart={1} colEnd={2} borderRadius='lg' bg='gray.400' boxShadow='dark-lg' rounded='lg' overflow='scroll'>
               <Box>
@@ -196,14 +196,14 @@ function TradingPairShow() {
                 <Spacer />
                 <Center>
                   <Text fontSize='lg'>
-                  24hr Trading Volume: {lastDayData && tradingPair ? thousandsSeparators(parseFloat(lastDayData?.volume).toFixed(2)) + ' ' + tradingPair.ticker : 'Loading...'}
+                  24h Trading Volume: {lastDayData && tradingPair ? thousandsSeparators(parseFloat(lastDayData?.volume).toFixed(2)) + ' ' + tradingPair.ticker : 'Loading...'}
                   </Text>
                 </Center>
                 <Spacer />
                 <Center>
                   <Menu placement='right' flip>
                     <MenuButton as={Button} rightIcon={<ChevronDownIcon />} bg='gray.700' color='gray.100' _expanded={{ boxShadow: 'md', bg: 'gray.800', color: 'white' }} _hover={{ boxShadow: 'md', bg: 'gray.800', color: 'white' }}>
-                      {interval === '5m' ? 'Interval' : interval}
+                      {interval === '2h' ? 'Interval' : interval}
                     </MenuButton>
                     <MenuList overflow='visible'>
                       <MenuOptionGroup title='Interval' type='radio'>
@@ -215,18 +215,18 @@ function TradingPairShow() {
                         >1 minute
                         </MenuItemOption>
                         <MenuItemOption 
-                          value='15m'
+                          value='5m'
+                          onClick={() => {
+                            setInterval('5m')
+                          }}
+                        >5 minutes
+                        </MenuItemOption>
+                        <MenuItemOption 
+                          value='15m' 
                           onClick={() => {
                             setInterval('15m')
                           }}
                         >15 minutes
-                        </MenuItemOption>
-                        <MenuItemOption 
-                          value='30m' 
-                          onClick={() => {
-                            setInterval('30m')
-                          }}
-                        >30 minutes
                         </MenuItemOption>
                         <MenuItemOption 
                           value='1h' 
@@ -241,6 +241,20 @@ function TradingPairShow() {
                             setInterval('4h')
                           }}
                         >4 hours
+                        </MenuItemOption>
+                        <MenuItemOption 
+                          value='8h'
+                          onClick={() => {
+                            setInterval('8h')
+                          }}
+                        >8 hours
+                        </MenuItemOption>
+                        <MenuItemOption 
+                          value='1d'
+                          onClick={() => {
+                            setInterval('1d')
+                          }}
+                        >1 day
                         </MenuItemOption>
                       </MenuOptionGroup>
                     </MenuList>

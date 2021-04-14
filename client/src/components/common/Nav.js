@@ -17,7 +17,10 @@ import {
   Icon,
   Text,
   useToast,
-  Divider
+  Divider,
+  Box,
+  extendTheme,
+  Heading
 } from '@chakra-ui/react'
 import React from 'react'
 import FormRegister from './FormRegister'
@@ -27,8 +30,16 @@ import { FaWallet } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { getToken, logoutUser } from '../../lib/auth'
 import { get24HourData, getAllTradingPairs, getUserProfile } from '../../lib/api'
+import '@fontsource/electrolize' 
+
 
 function Nav() {
+
+  const theme = extendTheme({
+    fonts: {
+      heading: 'Electrolize'
+    }
+  })
 
   const [isOpenLogin, setIsOpenLogin] = React.useState(false)
   const [isOpenRegister, setIsOpenRegister] = React.useState(false)
@@ -156,7 +167,7 @@ function Nav() {
 
   return (
     <>
-      <ChakraProvider>
+      <ChakraProvider theme={theme}>
         <Flex
           as='nav'
           align="center"
@@ -169,9 +180,17 @@ function Nav() {
           <Link to='/markets/'>
             <Button display={{ base: 'block', md: 'block' }}
               flexBasis={{ base: '100%', md: 'auto' }} bg='gray.200' as='button'>
-            Markets
+              Markets
             </Button>
           </Link>
+          <Spacer />
+          
+          <Box>
+            <Heading color='gray.300'>
+              eTavros
+            </Heading>
+              
+          </Box>
           <Spacer />
           {userData ?
             <>

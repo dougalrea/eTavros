@@ -17,6 +17,7 @@ import {
   useToast
 } from '@chakra-ui/react'
 import { EmailIcon, LockIcon, AtSignIcon } from '@chakra-ui/icons'
+import ImageUploadField from './ImageUploadField'
 
 function FormRegister({ registered }) {
   const [error, setError] = React.useState(false)
@@ -24,7 +25,8 @@ function FormRegister({ registered }) {
     email: '',
     username: '',
     password: '',
-    password_confirmation: ''
+    password_confirmation: '',
+    profile_image: ''
   })
 
   const handleFocus = () => {
@@ -140,6 +142,16 @@ function FormRegister({ registered }) {
               value={formdata.password_confirmation}
               placeholder='Confirm Password' 
               aria-label='Password Confirmation' />
+          </InputGroup>
+          <FormErrorMessage>{error.name}</FormErrorMessage>
+        </FormControl>
+        <FormControl isRequired>
+          <InputGroup>
+            <ImageUploadField              
+              value={formdata.profile_image}
+              name='profile_image'
+              onChange={handleChange}
+            />
           </InputGroup>
           {error ? <FormHelperText textAlign='center' color='red.500'>
             {error}

@@ -153,12 +153,12 @@ function TradingPairShow() {
   return (
     <>
       <ChakraProvider>
-        <Container maxW='100%' maxH='91vh' p={0} >
+        <Container maxW='100%' maxH='100%' p={0} >
           <Grid
             padding='10px'
             bg='gray.400'
             w='100%'
-            maxH='91vh'
+            maxH='92vh'
             templateRows="repeat(14, 1fr)"
             templateColumns="repeat(4, 1fr)"
             gap={3}

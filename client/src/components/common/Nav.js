@@ -174,7 +174,9 @@ function Nav() {
           justify="space-between"
           wrap="wrap"
           w="100%"
-          p={4}
+          pl={4}
+          pr={4}
+          h='8vh'
           bg='gray.700'
         >
           <Link to='/markets/'>

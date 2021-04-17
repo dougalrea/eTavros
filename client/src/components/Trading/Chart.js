@@ -7,7 +7,6 @@ import { get24HourData, getHistoricalData } from '../../lib/api'
 function Chart({ interval, tradingPair, setLastDayData }) {
   const [candleSeries, setCandleSeries] = React.useState(undefined)
   const [chartHasGenerated, setChartHasGenerated] = React.useState(false)
-  // const [historicalCandleDataHasBeenFetched, setHistoricalCandleDataHasBeenFetched] = React.useState(false)
   
   const ref = React.useRef()
   const socketRef = React.useRef()
@@ -20,7 +19,7 @@ function Chart({ interval, tradingPair, setLastDayData }) {
   const generateChart = async () => {
     chart = createChart(ref.current, {
       width: window.innerWidth / 2 - 16,
-      height: ((window.innerHeight - 70) / 2.15),
+      height: (7 * (window.innerHeight / 14) - 56),
       layout: {
         backgroundColor: '#2D3748',
         textColor: '#EDF2F7'

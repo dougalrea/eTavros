@@ -60,14 +60,6 @@ function FormTrade({ orderType, tradingPair, setTradingPairDataFound, userData, 
       console.log(error)
     }
   }
-  // const getTradingPairData = async () => {
-  //   try {
-  //     const { data } = await getOneTradingPair(name)
-  //     setTradingPair(data)
-  //   } catch (error) {
-  //     console.log('Error retrieving trading pair data from django: ', error)
-  //   }
-  // }
 
   const handleChange = (event) => {
     if (event.target.name === 'amount') {

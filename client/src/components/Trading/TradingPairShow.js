@@ -43,7 +43,6 @@ function TradingPairShow() {
   const [lastDayData, setLastDayData] = React.useState(undefined)
   const [interval, setInterval] = React.useState('2h')
   const [userData, setUserData] = React.useState(undefined)
-  const [userDataFound, setUserDataFound] = React.useState(false)
   const [tradingPairDataFound, setTradingPairDataFound] = React.useState(false)
   
   const commentsEndRef = React.useRef()
@@ -52,6 +51,8 @@ function TradingPairShow() {
   const { formdata, handleChange, setFormdata } = useForm({
     text: ''
   })
+
+  const token = getToken()
 
   const getUserData = async () => {
     try {
@@ -137,18 +138,14 @@ function TradingPairShow() {
   }, [tradingPairDataFound, tradingPair])
 
   React.useEffect(() => {
-    if (!userDataFound) {
-      getUserData()
-      console.log('user data found')
-      setUserDataFound(true)
-    }
+    getUserData()
 
     if (!tradingPairDataFound) {
       getTradingPairData()
       console.log('trading pair data found')
       setTradingPairDataFound(true)
     }
-  }, [tradingPairDataFound])
+  }, [tradingPairDataFound, token])
 
   return (
     <>
@@ -271,7 +268,7 @@ function TradingPairShow() {
                   Favourited By
                 </Heading>
                 <Stack direction='row'>
-                  {userData && tradingPair ? 
+                  {userData && tradingPair && token ? 
                     <>
                       {tradingPair.favourited_by.some(user => user.id === userData.id) ? 
                         <Center 

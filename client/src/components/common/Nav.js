@@ -133,7 +133,7 @@ function Nav() {
     try {
       const token = getToken()
       const { data } = await getUserProfile(token)
-      setUserData(data)
+      setUserData(data)  
     } catch (error) {
       console.log('failed getting user data: ', error)
     }
@@ -159,9 +159,11 @@ function Nav() {
     dollarValuesArray = []
     walletBalancesArray = []
 
-    tradingPairsArray.map(tradingPair => {
-      return getLastPrice(tradingPair.name)
-    })
+    if (userData && tradingPairsArray) {
+      tradingPairsArray.map(tradingPair => {
+        return getLastPrice(tradingPair.name)
+      })  
+    }
     
   }, [tradingPairsArray, userData])
 

@@ -178,6 +178,7 @@ function Nav() {
           pl={4}
           pr={4}
           h='8vh'
+          minH='42px'
           bg='gray.700'
         >
           <Link to='/markets/'>

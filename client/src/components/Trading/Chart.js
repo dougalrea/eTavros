@@ -57,7 +57,6 @@ function Chart({ interval, tradingPair, setLastDayData }) {
       const { data } = await get24HourData(name)
       setLastDayData(data)
       dayVolumeTicker ++
-      console.log('24 hr data found: ', dayVolumeTicker)
     } catch (error) {
       console.log('Error retrieving 24 hr data: ', error)
     }
@@ -78,9 +77,6 @@ function Chart({ interval, tradingPair, setLastDayData }) {
       socketRef.current.close()
     }
     socketRef.current = new WebSocket(`wss://stream.binance.com:9443/ws/${tradingPair.ticker.toString().toLowerCase()}busd@kline_${interval}`)
-    socketRef.current.onopen = async e => {
-      console.log('websocket connected', e)
-    }
     socketRef.current.onmessage = async (event) => {
       const message = JSON.parse(event?.data)
       const candlestick = message.k
@@ -106,19 +102,14 @@ function Chart({ interval, tradingPair, setLastDayData }) {
 
     if (!chartHasGenerated) {
       generateChart()
-      console.log('chart has been generated')
       setChartHasGenerated(true)
     }
 
     if (candleSeries && tradingPair) {
       getHistoricalKline()
       getLastDayData()
-      console.log('historical candlestick data successfully set')
-      console.log('trying to connect websocket')
       getLiveCandlestickUpdates()
     }
-
-    console.log('new mount')
 
     return function cleaup() {
       if (socketRef.current) {

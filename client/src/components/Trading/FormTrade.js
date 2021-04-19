@@ -44,7 +44,6 @@ function FormTrade({ orderType, tradingPair, setTradingPairDataFound, userData, 
     try {
       const { data } = await get24HourData(name)
       setLastPrice(data.lastPrice)
-      console.log('last price: ', data.lastPrice)
     } catch (error) {
       console.log('Error retrieving latest price data: ', error)
     }

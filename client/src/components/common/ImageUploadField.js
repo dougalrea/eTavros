@@ -5,19 +5,27 @@ import { Input, Image, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import { CgProfile } from 'react-icons/cg'
 
 
-
-
 function ImageUploadField({ value, name, onChange }) {
 
   const uploadUrl = process.env.REACT_APP_CLOUDINARY_URL
+  const secondaryUploadPreset = process.env.REACT_APP_CLOUDINARY_SECONDARY_PRESET
   const uploadPreset = process.env.REACT_APP_CLOUDINARY_PRESET
 
   const handleUpload = async event => {
     const data = new FormData()
     data.append('file', event.target.files[0])
-    data.append('upload_preset', uploadPreset)
-    const res = await axios.post(uploadUrl, data)
-    onChange({ target: { name, value: res.data.url } })
+    
+    try {
+      data.append('upload_preset', uploadPreset)
+      const res = await axios.post(uploadUrl, data)
+      onChange({ target: { name, value: res.data.url } })
+    } catch (error) {
+      console.log('AI Face Detection Limit Reached: ', error)
+      data.delete('upload_preset')
+      data.append('upload_preset', secondaryUploadPreset)
+      const res = await axios.post(uploadUrl, data)
+      onChange({ target: { name, value: res.data.url } })
+    }
   }
   return (
     <>

@@ -40,7 +40,7 @@ function TradingPairsIndex() {
             <Tab ml={4} minW='20' bg='gray.700' rounded='md' fontSize='md' fontWeight='semibold' _selected={{ color: 'gray.100', bg: 'gray.800', boxShadow: '2xl' }}>
               All
             </Tab>
-            <Tab bg='gray.700' rounded='md' fontSize='md' fontWeight='semibold' _selected={{ color: 'gray.100', bg: 'gray.800', boxShadow: '2xl' }}>
+            <Tab ml={4} bg='gray.700' rounded='md' fontSize='md' fontWeight='semibold' _selected={{ color: 'gray.100', bg: 'gray.800', boxShadow: '2xl' }}>
               Favourites
             </Tab>
           </TabList>

@@ -16,9 +16,6 @@ function IndexCard({ tradingPair, ticker }) {
   React.useEffect(() => {
     const getLiveDataFeed = () => {
       socketRef.current = new WebSocket(`wss://stream.binance.com:9443/ws/${ticker.toString().toLowerCase()}busd@ticker`)
-      socketRef.current.onopen = e => {
-        console.log('index websocket connected', e)
-      }
       socketRef.current.onmessage = async (event) => {
         const message = JSON.parse(event?.data)
         setLiveMarketData(message)

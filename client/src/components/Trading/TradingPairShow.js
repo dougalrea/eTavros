@@ -133,7 +133,6 @@ function TradingPairShow() {
     }
     if (tradingPairDataFound && tradingPair) {
       scrollToBottomComments()
-      console.log('scrolling to bottom of comments')
     }
   }, [tradingPairDataFound, tradingPair])
 
@@ -142,7 +141,6 @@ function TradingPairShow() {
 
     if (!tradingPairDataFound) {
       getTradingPairData()
-      console.log('trading pair data found')
       setTradingPairDataFound(true)
     }
   }, [tradingPairDataFound, token])
@@ -304,7 +302,7 @@ function TradingPairShow() {
                     <>
                       {tradingPair.favourited_by.map(user => {
                         return (
-                          <Avatar key={user.id} size='md' src={user.profile_image} />
+                          <Avatar ml={3} key={user.id} size='md' src={user.profile_image} />
                         )
                       })}
                     </>

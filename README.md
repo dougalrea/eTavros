@@ -1,11 +1,6 @@
-# sei-project-4
+# eTavros - The virtual cryptocurrency trading platform
 
-notes:
+## Overview 
 
-wss://stream.binance.com:9443/ws/btcbusd@trade 
+eTavros is a real time cryptocurrency trading platform built on a Python/Django backend with a React front end. It allows user to view realtime candlestick charts, buy and sell a variety of cryptocurrencies, track the rise and fall of their portfolio value, view the trade history of each coin and interpret and contribute to current market sentiment.
 
-{"e":"trade","E":1613987301523,"s":"BTCBUSD","t":111279090,"p":"55192.62000000","q":"0.00146900","b":1792558104,"a":1792558103,"T":1613987301484,"m":false,"M":true}
-
-wss://stream.binance.com:9443/ws/btcbusd@kline_5m
-
-{"e":"kline","E":1613987335824,"s":"BTCBUSD","k":{"t":1613987100000,"T":1613987399999,"s":"BTCBUSD","i":"5m","f":111275924,"L":111279562,"o":"55414.90000000","c":"55202.14000000","h":"55527.48000000","l":"55149.18000000","v":"100.50004800","n":3639,"x":false,"q":"5562810.66542360","V":"41.82751100","Q":"2314886.16520183","B":"0"}}

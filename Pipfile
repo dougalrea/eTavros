@@ -12,9 +12,10 @@ pyjwt = "*"
 python-dotenv = "*"
 dj-database-url = "*"
 django-on-heroku = "*"
-python-binance = "*"
+binance = "*"
 
 [dev-packages]
+binance = "*"
 
 [requires]
 python_version = "3.9"

@@ -12,6 +12,7 @@ pyjwt = "*"
 python-dotenv = "*"
 dj-database-url = "*"
 django-on-heroku = "*"
+python-binance = "*"
 binance = "*"
 requests = "*"
 

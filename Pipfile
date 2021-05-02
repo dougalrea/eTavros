@@ -15,7 +15,6 @@ django-on-heroku = "*"
 binance = "*"
 
 [dev-packages]
-binance = "*"
 
 [requires]
 python_version = "3.9"

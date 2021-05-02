@@ -1,11 +1,63 @@
-# sei-project-4
+# eTavros - The virtual cryptocurrency trading platform
 
-notes:
+## Overview 
 
-wss://stream.binance.com:9443/ws/btcbusd@trade 
+eTavros is an online cryptocurrency trading platform I built on a Python/Django back end with a React front end. Similar to eToro™ (but arguably better) it allows users to:
 
-{"e":"trade","E":1613987301523,"s":"BTCBUSD","t":111279090,"p":"55192.62000000","q":"0.00146900","b":1792558104,"a":1792558103,"T":1613987301484,"m":false,"M":true}
+- view and interact with realtime candlestick charts, 
+- buy and sell a variety of cryptocurrencies with virtual money, 
+- track the rise and fall of their portfolio value, 
+- view the trade history of each coin & witness third party trades as they happen,
+- interpret & contribute to live market sentiment with coin-favouriting and Bullish/Bearish commenting functionality.
 
-wss://stream.binance.com:9443/ws/btcbusd@kline_5m
+Etavros juggles multiple live websocket data streams with first and third party api requests, a range of third party libraries, interactive trading chart generation and fool proof error handling all under the sleek hood of a single page application. Seriously, you should go check it out.
 
-{"e":"kline","E":1613987335824,"s":"BTCBUSD","k":{"t":1613987100000,"T":1613987399999,"s":"BTCBUSD","i":"5m","f":111275924,"L":111279562,"o":"55414.90000000","c":"55202.14000000","h":"55527.48000000","l":"55149.18000000","v":"100.50004800","n":3639,"x":false,"q":"5562810.66542360","V":"41.82751100","Q":"2314886.16520183","B":"0"}}
+## Brief
+
+### Project Brief
+
+- Build a full-stack application by making your own backend and your own front-end.
+- Use a Python Django API using Django REST Framework to serve your data from a Postgres database.
+- Consume your API with a separate front-end built with React.
+- Be a complete product which most likely means multiple relationships and CRUD functionality for at least a couple of models.
+- Implement thoughtful user stories/wireframes that are significant enough to help you know which features are core MVP and which you can cut.
+- Have a visually impressive design to kick your portfolio up a notch and have something to wow future clients & employers.
+- Be deployed online so it’s publicly accessible.
+
+## Technologies Used
+
+### Back End:
+
+- Python
+- Django
+- Django REST Framework
+
+### Database:
+
+- PostgreSQL
+
+### Front End:
+
+- React.js
+- JavaScript (ES6)
+- HTML5
+- Semantic UI React Framework
+- Yarn
+- Axios
+- CSS5 and SASS
+- Cloudinary
+- Dependencies installed: 
+    - react-router-dom 
+    - react-popup 
+    - react-select
+    - moment.js
+    - binancy-python
+    - lightweight-charts
+
+### Dev Tools:
+
+- Git & GitHub
+- Insomnia
+- TablePlus
+- VSCode & Eslint
+- Heroku

@@ -13,6 +13,7 @@ python-dotenv = "*"
 dj-database-url = "*"
 django-on-heroku = "*"
 binance = "*"
+requests = "*"
 
 [dev-packages]
 

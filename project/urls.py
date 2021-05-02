@@ -3,7 +3,7 @@ from django.urls import path, include, re_path # <-- added this new import re_pa
 from .views import index # <-- also new
 
 urlpatterns = [
-        path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
     path('api/auth/', include('jwt_auth.urls')),
     path('api/markets/', include('trading_pairs.urls')),
     path('api/comments/', include('comments.urls')),

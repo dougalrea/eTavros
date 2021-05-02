@@ -12,7 +12,7 @@ pyjwt = "*"
 python-dotenv = "*"
 dj-database-url = "*"
 django-on-heroku = "*"
-binance.client = "*"
+binance = "*"
 
 [dev-packages]
 

@@ -139,10 +139,9 @@ function TradingPairShow() {
   React.useEffect(() => {
     getUserData()
 
-    if (!tradingPairDataFound) {
-      getTradingPairData()
-      setTradingPairDataFound(true)
-    }
+    getTradingPairData()
+    setTradingPairDataFound(true)
+
   }, [tradingPairDataFound, token])
 
   return (
@@ -300,7 +299,7 @@ function TradingPairShow() {
                     ''}
                   {tradingPair?.favourited_by?.length ?
                     <>
-                      {tradingPair.favourited_by.reverse().map(user => {
+                      {tradingPair.favourited_by.map(user => {
                         return (
                           <Avatar ml={3} key={user.id} size='md' src={user.profile_image} />
                         )

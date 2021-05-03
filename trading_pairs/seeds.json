@@ -7,12 +7,11 @@
     "ticker": "BTC",
     "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1.png",
     "description": "Bitcoin is a decentralized cryptocurrency originally described in a 2008 whitepaper by a person, or group of people, using the alias Satoshi Nakamoto. It was launched soon after, in January 2009.",
-    "web_socket_url": "wss://stream.binance.com:9443/ws/btcbusd@kline_5m",
+    "total_suppy": 21000000,
     "favourited_by": [
-      2,
-      3,
-      4,
-      5,
+      15,
+      18,
+      20,
       6
     ]
   }
@@ -25,9 +24,160 @@
     "ticker": "ETH",
     "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1027.png",
     "description": "Ethereum is a decentralized open-source blockchain system that features its own cryptocurrency, Ether. ETH works as a platform for numerous other cryptocurrencies, as well as for the execution of decentralized smart contracts.",
-    "web_socket_url": "wss://stream.binance.com:9443/ws/ethbusd@kline_5m",
+    "total_suppy": 115018735,
     "favourited_by": [
-      2
+      2,
+      15,
+      18,
+      16,
+      6,
+      21
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 3,
+  "fields": {
+    "name": "cardano",
+    "ticker": "ADA",
+    "symbol": "https://www.kindpng.com/picc/m/651-6518938_aluminium-pin-cardano-cardano-hd-png-download.png",
+    "description": "Cardano is a proof-of-stake blockchain platform that says its goal is to allow “changemakers, innovators and visionaries” to bring about positive global change. The open-source project also aims to “redistribute power from unaccountable structures to the margins to individuals” — helping to create a society that is more secure, transparent and fair.",
+    "total_suppy": 31948309441,
+    "favourited_by": [
+      16,
+      6
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 4,
+  "fields": {
+    "name": "polkadot",
+    "ticker": "DOT",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png",
+    "description": "Polkadot is an open-source sharding multichain protocol that facilitates the cross-chain transfer of any data or asset types, not just tokens, thereby making a wide range of blockchains interoperable with each other. This interoperability seeks to establish a fully decentralized and private web, controlled by its users, and simplify the creation of new applications, institutions and services.",
+    "total_suppy": 919141694,
+    "favourited_by": [
+      4,
+      6
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 5,
+  "fields": {
+    "name": "litecoin",
+    "ticker": "LTC",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/2.png",
+    "description": "Litecoin was created based on the Bitcoin (BTC) protocol, but it differs in terms of the hashing algorithm used, hard cap, block transaction times and a few other factors. Litecoin has a block time of just 2.5 minutes and extremely low transaction fees, making it suitable for micro-transactions and point-of-sale payments.",
+    "total_suppy": 66637340,
+    "favourited_by": [
+      3,
+      17,
+      6,
+      21
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 6,
+  "fields": {
+    "name": "stellar",
+    "ticker": "XLM",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/512.png",
+    "description": "Put simply, Stellar is an open network that allows money to be moved and stored. When it was released in July 2014, one of its goals was boosting financial inclusion by reaching the world’s unbanked — but soon afterwards, its priorities shifted to helping financial firms connect with one another through blockchain technology.",
+    "total_suppy": 22592026096,
+    "favourited_by": []
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 7,
+  "fields": {
+    "name": "dogecoin",
+    "ticker": "DOGE",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/74.png",
+    "description": "Dogecoin (DOGE) is based on the popular \"doge\" Internet meme and features a Shiba Inu on its logo. The open-source digital currency was created by Billy Markus from Portland, Oregon and Jackson Palmer from Sydney, Australia, and was forked from Litecoin in December 2013. Dogecoin's creators envisaged it as a fun, light-hearted cryptocurrency that would have greater appeal beyond the core Bitcoin audience, since it was based on a dog meme.",
+    "total_suppy": 128729345278,
+    "favourited_by": [
+      18,
+      17,
+      16
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 8,
+  "fields": {
+    "name": "terra",
+    "ticker": "LUNA",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/4172.png",
+    "description": "Terra is a blockchain protocol that uses fiat-pegged stablecoins to power price-stable global payments systems. According to its white paper, Terra combines the price stability and wide adoption of fiat currencies with the censorship-resistance of Bitcoin (BTC) and offers fast and affordable settlements.",
+    "total_suppy": 410045056,
+    "favourited_by": []
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 9,
+  "fields": {
+    "name": "veChain",
+    "ticker": "VET",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/3077.png",
+    "description": "VeChain aims to use distributed governance and Internet of Things (IoT) technology to create an ecosystem which solves some of the major problems with supply chain management. The idea is to boost the efficiency, traceability and transparency of supply chains while reducing costs and placing more control in the hands of individual users.",
+    "total_suppy": 64315576989,
+    "favourited_by": [
+      6
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 10,
+  "fields": {
+    "name": "monero",
+    "ticker": "XMR",
+    "symbol": "https://www.prediki.com/media/displays/9de66fcbfd9b4b46a8c5a9babc6c70a8/wiki_medium.png",
+    "description": "Monero was launched in 2014, and its goal is simple: to allow transactions to take place privately and with anonymity. Even though it’s commonly thought that BTC can conceal a person’s identity, it’s often easy to trace payments back to their original source because blockchains are transparent. On the other hand, XMR is designed to obscure senders and recipients alike through the use of advanced cryptography.",
+    "total_suppy": 17860753,
+    "favourited_by": [
+      15,
+      6
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 11,
+  "fields": {
+    "name": "EOS",
+    "ticker": "EOS",
+    "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/1765.png",
+    "description": "EOS is a platform that’s designed to allow developers to build decentralized apps. The project’s goal is relatively simple: to make it as straightforward as possible for programmers to embrace blockchain technology — and ensure that the network is easier to use than rivals. As a result, tools and a range of educational resources are provided to support developers who want to build functional apps quickly.",
+    "total_suppy": 951269950,
+    "favourited_by": [
+      6
+    ]
+  }
+},
+{
+  "model": "trading_pairs.tradingpair",
+  "pk": 12,
+  "fields": {
+    "name": "neo",
+    "ticker": "NEO",
+    "symbol": "https://res.cloudinary.com/dtg5hvt1b/image/upload/v1618858983/sei-project-4/aapsg92fqkksydpcynqq.jpg",
+    "description": "Neo bills itself as a “rapidly growing and developing” ecosystem that has the goal of becoming the foundation for the next generation of the internet — a new economy where digitized payments, identities and assets come together. Initially known as Antshares, this project was believed to be China’s first-ever public blockchain when it was launched in February 2014. It’s often been likened to the Chinese version of the Ethereum network.",
+    "total_suppy": 70538831,
+    "favourited_by": [
+      15,
+      16,
+      21
     ]
   }
 }

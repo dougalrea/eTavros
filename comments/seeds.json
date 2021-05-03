@@ -64,5 +64,280 @@
     "trading_pair": 1,
     "owner": 7
   }
+},
+{
+  "model": "comments.comment",
+  "pk": 38,
+  "fields": {
+    "text": "yeeeehaw",
+    "created_at": "2021-03-08T18:42:32.260Z",
+    "bull_or_bear": false,
+    "trading_pair": 1,
+    "owner": 8
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 39,
+  "fields": {
+    "text": "Lets get this bread",
+    "created_at": "2021-03-10T14:20:45.250Z",
+    "bull_or_bear": true,
+    "trading_pair": 1,
+    "owner": 8
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 40,
+  "fields": {
+    "text": "So excited to buy a virtual Tesla with all the virtual USD i'm making. Maybe I'll even share some earnings with my virtual girlfriend",
+    "created_at": "2021-03-10T19:13:49.897Z",
+    "bull_or_bear": true,
+    "trading_pair": 1,
+    "owner": 3
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 41,
+  "fields": {
+    "text": "So undervalued right now. I remortgaged my daughter in law just build my stack. Take me to the mooooon!!1",
+    "created_at": "2021-03-11T18:23:13.956Z",
+    "bull_or_bear": true,
+    "trading_pair": 2,
+    "owner": 7
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 42,
+  "fields": {
+    "text": "I bought this trading account off a 7 year old on Rune Scape. for more than the portfolio is even worth. what the hell has my life come to...",
+    "created_at": "2021-03-11T18:31:19.186Z",
+    "bull_or_bear": false,
+    "trading_pair": 1,
+    "owner": 7
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 43,
+  "fields": {
+    "text": "Buy high, sell low. I'm a born natural.",
+    "created_at": "2021-03-13T17:31:03.805Z",
+    "bull_or_bear": false,
+    "trading_pair": 2,
+    "owner": 3
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 44,
+  "fields": {
+    "text": "you guys suck at trading",
+    "created_at": "2021-03-20T12:06:33.178Z",
+    "bull_or_bear": true,
+    "trading_pair": 1,
+    "owner": 2
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 45,
+  "fields": {
+    "text": "this is the best one",
+    "created_at": "2021-03-20T12:07:04.825Z",
+    "bull_or_bear": true,
+    "trading_pair": 4,
+    "owner": 2
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 46,
+  "fields": {
+    "text": "Ethereum? more like ethereYUM YUM GET IN MY TUM I CAN'T GET ENOUGH OF THIS DELICIOUS STOCK",
+    "created_at": "2021-03-28T12:27:14.728Z",
+    "bull_or_bear": true,
+    "trading_pair": 2,
+    "owner": 8
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 47,
+  "fields": {
+    "text": "Worst investment decision of my life. Would have been better of investing in tulips.",
+    "created_at": "2021-03-28T15:14:26.112Z",
+    "bull_or_bear": false,
+    "trading_pair": 2,
+    "owner": 15
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 48,
+  "fields": {
+    "text": "Can't wait to make loads of ca$h",
+    "created_at": "2021-04-06T18:32:22.270Z",
+    "bull_or_bear": true,
+    "trading_pair": 10,
+    "owner": 6
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 49,
+  "fields": {
+    "text": "Just hope I can impress my parents!",
+    "created_at": "2021-04-06T19:10:31.679Z",
+    "bull_or_bear": true,
+    "trading_pair": 11,
+    "owner": 6
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 50,
+  "fields": {
+    "text": "My uncle bought $800k of eggplant futures",
+    "created_at": "2021-04-06T19:18:51.843Z",
+    "bull_or_bear": false,
+    "trading_pair": 11,
+    "owner": 6
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 51,
+  "fields": {
+    "text": "My fingers hurt",
+    "created_at": "2021-04-07T18:32:17.046Z",
+    "bull_or_bear": false,
+    "trading_pair": 1,
+    "owner": 6
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 52,
+  "fields": {
+    "text": "I hope commenting here doesn't break everything!",
+    "created_at": "2021-04-07T21:24:16.549Z",
+    "bull_or_bear": false,
+    "trading_pair": 1,
+    "owner": 6
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 53,
+  "fields": {
+    "text": "Who even likes this coin? its utter dog water...",
+    "created_at": "2021-04-07T21:45:43.663Z",
+    "bull_or_bear": false,
+    "trading_pair": 5,
+    "owner": 6
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 54,
+  "fields": {
+    "text": "Don't worry, this web app is unbreakable. Just like Kimmy Schmitt",
+    "created_at": "2021-04-08T18:12:17.500Z",
+    "bull_or_bear": true,
+    "trading_pair": 1,
+    "owner": 16
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 55,
+  "fields": {
+    "text": "I've broken this app multiple times today. I'm at my wit's end",
+    "created_at": "2021-04-08T20:30:54.688Z",
+    "bull_or_bear": false,
+    "trading_pair": 1,
+    "owner": 15
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 56,
+  "fields": {
+    "text": "I love memes so much I put $40,000 on them. Call me a dumb money all you like, doge is here to stay",
+    "created_at": "2021-04-08T21:19:35.446Z",
+    "bull_or_bear": true,
+    "trading_pair": 7,
+    "owner": 16
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 57,
+  "fields": {
+    "text": "Why bull & bear? because the Bull attacks with an upward swing and a bear attacks with a downwards strike. the more you know...",
+    "created_at": "2021-04-10T16:59:20.333Z",
+    "bull_or_bear": true,
+    "trading_pair": 2,
+    "owner": 3
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 58,
+  "fields": {
+    "text": "I spend too much of my time watching nature documentaries. no plot. no character development. just a bunch of god damn animals and stuff",
+    "created_at": "2021-04-10T17:01:34.189Z",
+    "bull_or_bear": false,
+    "trading_pair": 2,
+    "owner": 3
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 59,
+  "fields": {
+    "text": "Every time my dog is a good boy I buy some dogecoin. Gonna finally give it all to him at his graduation. Keep it up lil buddy",
+    "created_at": "2021-04-11T16:29:21.497Z",
+    "bull_or_bear": true,
+    "trading_pair": 7,
+    "owner": 17
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 60,
+  "fields": {
+    "text": "I'm doing well, $35 up in 4 minutes",
+    "created_at": "2021-04-11T16:36:33.103Z",
+    "bull_or_bear": true,
+    "trading_pair": 2,
+    "owner": 18
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 61,
+  "fields": {
+    "text": "check out my new profile pic",
+    "created_at": "2021-04-17T10:19:22.389Z",
+    "bull_or_bear": false,
+    "trading_pair": 5,
+    "owner": 20
+  }
+},
+{
+  "model": "comments.comment",
+  "pk": 62,
+  "fields": {
+    "text": "Can't believe this page is free and has no ads... what a godsend!",
+    "created_at": "2021-04-19T20:07:29.157Z",
+    "bull_or_bear": true,
+    "trading_pair": 2,
+    "owner": 21
+  }
 }
 ]

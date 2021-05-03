@@ -151,8 +151,10 @@ function Nav() {
 
   React.useEffect(() => {
     getUserData()
-    getTradingPairsArray()
-  }, [token])
+    if (!tradingPairsArray) {
+      getTradingPairsArray()
+    }
+  }, [token, tradingPairsArray])
 
   React.useEffect(() => {
 

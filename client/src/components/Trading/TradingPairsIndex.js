@@ -18,19 +18,23 @@ function TradingPairsIndex() {
         console.log(error)
       }
     }
-    
+    const token = getToken()
+
     const getUserData = async () => {
       try {
-        const token = getToken()
         const { data } = await getUserProfile(token)
         setUserData(data)
       } catch (error) {
         console.log(error)
       }
     }
-    getTradingPairData()
-    getUserData()
-  }, [])
+    if (!tradingPairData) {
+      getTradingPairData()
+    }
+    if (token) {
+      getUserData()
+    }
+  }, [userData, tradingPairData])
 
   return (
     <ChakraProvider>

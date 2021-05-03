@@ -10,7 +10,7 @@ eTavros is an online cryptocurrency trading platform I built on a Python/Django 
 - view the trade history of each coin & witness third party trades as they happen,
 - interpret & contribute to live market sentiment with coin-favouriting and Bullish/Bearish commenting functionality.
 
-Etavros juggles multiple live websocket data streams with first and third party api requests, a range of third party libraries, interactive trading chart generation and fool proof error handling all under the sleek hood of a single page application. Seriously, you should go check it out.
+eTavros juggles multiple live websocket data streams with interactive trading chart generation, first and third party api requests, a range of third party libraries and (mostly) fool proof error handling all under the sleek hood of a single page application. Seriously, you should go **[check it out](https://etavros.herokuapp.com)**. Alternatively, feel free to clone this repo and run the app locally. 
 
 ## Brief
 
@@ -23,6 +23,8 @@ Etavros juggles multiple live websocket data streams with first and third party 
 - Implement thoughtful user stories/wireframes that are significant enough to help you know which features are core MVP and which you can cut.
 - Have a visually impressive design to kick your portfolio up a notch and have something to wow future clients & employers.
 - Be deployed online so it’s publicly accessible.
+
+eTavros exceeds the requirements of the project brief because I was keen to work with new technologies in the process, besides Django and React which I already felt comfortable with. I was drawn to the idea of building an application which feels somewhat like a game, and can hopefully be enjoyable even without a large userbase. Writing a full stack cryptocurrency trading platform offered plenty of new challenges and it became an incredibly addictive project.
 
 ## Technologies Used
 
@@ -44,14 +46,15 @@ Etavros juggles multiple live websocket data streams with first and third party 
 - Semantic UI React Framework
 - Yarn
 - Axios
-- CSS5 and SASS
+- CSS5 and SASS (Styled with Chakra-UI)
 - Cloudinary
 - Dependencies installed: 
     - react-router-dom 
-    - react-popup 
     - react-select
-    - moment.js
-    - binancy-python
+    - requests
+    - websockets
+    - python-dateutil
+    - python-binance
     - lightweight-charts
 
 ### Dev Tools:
@@ -61,3 +64,6 @@ Etavros juggles multiple live websocket data streams with first and third party 
 - TablePlus
 - VSCode & Eslint
 - Heroku
+
+## Approach
+

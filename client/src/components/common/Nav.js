@@ -52,6 +52,7 @@ function Nav() {
   let walletBalancesArray = []
 
   const toast = useToast()
+  const token = getToken()
 
   const closeRegister = () => {
     setIsOpenRegister(false)
@@ -151,7 +152,7 @@ function Nav() {
   React.useEffect(() => {
     getUserData()
     getTradingPairsArray()
-  }, [])
+  }, [token])
 
   React.useEffect(() => {
 

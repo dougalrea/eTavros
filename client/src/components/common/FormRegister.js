@@ -145,7 +145,7 @@ function FormRegister({ registered }) {
           </InputGroup>
           <FormErrorMessage>{error.name}</FormErrorMessage>
         </FormControl>
-        <FormControl isRequired>
+        <FormControl >
           <InputGroup>
             <ImageUploadField              
               value={formdata.profile_image}

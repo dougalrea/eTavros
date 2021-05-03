@@ -10,9 +10,8 @@
     "total_suppy": 21000000,
     "favourited_by": [
       15,
-      18,
-      20,
-      6
+      3,
+      7
     ]
   }
 },
@@ -26,12 +25,9 @@
     "description": "Ethereum is a decentralized open-source blockchain system that features its own cryptocurrency, Ether. ETH works as a platform for numerous other cryptocurrencies, as well as for the execution of decentralized smart contracts.",
     "total_suppy": 115018735,
     "favourited_by": [
-      2,
-      15,
-      18,
-      16,
-      6,
-      21
+      21,
+      5,
+      3
     ]
   }
 },
@@ -45,7 +41,6 @@
     "description": "Cardano is a proof-of-stake blockchain platform that says its goal is to allow “changemakers, innovators and visionaries” to bring about positive global change. The open-source project also aims to “redistribute power from unaccountable structures to the margins to individuals” — helping to create a society that is more secure, transparent and fair.",
     "total_suppy": 31948309441,
     "favourited_by": [
-      16,
       6
     ]
   }
@@ -60,8 +55,8 @@
     "description": "Polkadot is an open-source sharding multichain protocol that facilitates the cross-chain transfer of any data or asset types, not just tokens, thereby making a wide range of blockchains interoperable with each other. This interoperability seeks to establish a fully decentralized and private web, controlled by its users, and simplify the creation of new applications, institutions and services.",
     "total_suppy": 919141694,
     "favourited_by": [
-      4,
-      6
+      2,
+      7
     ]
   }
 },
@@ -75,10 +70,11 @@
     "description": "Litecoin was created based on the Bitcoin (BTC) protocol, but it differs in terms of the hashing algorithm used, hard cap, block transaction times and a few other factors. Litecoin has a block time of just 2.5 minutes and extremely low transaction fees, making it suitable for micro-transactions and point-of-sale payments.",
     "total_suppy": 66637340,
     "favourited_by": [
-      3,
       17,
+      3,
+      21,
       6,
-      21
+      15
     ]
   }
 },
@@ -91,7 +87,9 @@
     "symbol": "https://s2.coinmarketcap.com/static/img/coins/64x64/512.png",
     "description": "Put simply, Stellar is an open network that allows money to be moved and stored. When it was released in July 2014, one of its goals was boosting financial inclusion by reaching the world’s unbanked — but soon afterwards, its priorities shifted to helping financial firms connect with one another through blockchain technology.",
     "total_suppy": 22592026096,
-    "favourited_by": []
+    "favourited_by": [
+      7
+    ]
   }
 },
 {
@@ -104,9 +102,8 @@
     "description": "Dogecoin (DOGE) is based on the popular \"doge\" Internet meme and features a Shiba Inu on its logo. The open-source digital currency was created by Billy Markus from Portland, Oregon and Jackson Palmer from Sydney, Australia, and was forked from Litecoin in December 2013. Dogecoin's creators envisaged it as a fun, light-hearted cryptocurrency that would have greater appeal beyond the core Bitcoin audience, since it was based on a dog meme.",
     "total_suppy": 128729345278,
     "favourited_by": [
-      18,
-      17,
-      16
+      2,
+      4
     ]
   }
 },
@@ -132,7 +129,9 @@
     "description": "VeChain aims to use distributed governance and Internet of Things (IoT) technology to create an ecosystem which solves some of the major problems with supply chain management. The idea is to boost the efficiency, traceability and transparency of supply chains while reducing costs and placing more control in the hands of individual users.",
     "total_suppy": 64315576989,
     "favourited_by": [
-      6
+      6,
+      22,
+      5
     ]
   }
 },
@@ -146,8 +145,9 @@
     "description": "Monero was launched in 2014, and its goal is simple: to allow transactions to take place privately and with anonymity. Even though it’s commonly thought that BTC can conceal a person’s identity, it’s often easy to trace payments back to their original source because blockchains are transparent. On the other hand, XMR is designed to obscure senders and recipients alike through the use of advanced cryptography.",
     "total_suppy": 17860753,
     "favourited_by": [
+      6,
       15,
-      6
+      3
     ]
   }
 },
@@ -175,9 +175,9 @@
     "description": "Neo bills itself as a “rapidly growing and developing” ecosystem that has the goal of becoming the foundation for the next generation of the internet — a new economy where digitized payments, identities and assets come together. Initially known as Antshares, this project was believed to be China’s first-ever public blockchain when it was launched in February 2014. It’s often been likened to the Chinese version of the Ethereum network.",
     "total_suppy": 70538831,
     "favourited_by": [
+      21,
       15,
-      16,
-      21
+      3
     ]
   }
 }

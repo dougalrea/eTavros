@@ -1,6 +1,7 @@
 from datetime import datetime, time, timedelta
 import os
 import dotenv
+from binance.client import Client
 from django.http import JsonResponse
 from dotenv.main import load_dotenv
 from rest_framework.response import Response
@@ -8,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied
-from binance.client import Client
+
 from .models import TradingPair
 from .serializers.common import TradingPairSerializer
 from .serializers.populated import PopulatedTradingPairSerializer

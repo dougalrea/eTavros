@@ -9,32 +9,35 @@ function TradingPairsIndex() {
   const [tradingPairData, setTradingPairData] = React.useState(undefined)
   const [userData, setUserData] = React.useState(undefined)
 
-  React.useEffect(() => {
-    const getTradingPairData = async () => {
-      try {
-        const { data } = await getAllTradingPairs()
-        setTradingPairData(data)
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    const token = getToken()
+  const token = getToken()
 
-    const getUserData = async () => {
-      try {
-        const { data } = await getUserProfile(token)
-        setUserData(data)
-      } catch (error) {
-        console.log(error)
-      }
+  const getTradingPairData = async () => {
+    try {
+      const { data } = await getAllTradingPairs()
+      setTradingPairData(data)
+    } catch (error) {
+      console.log(error)
     }
+  }
+
+  const getUserData = async () => {
+    try {
+      const { data } = await getUserProfile(token)
+      setUserData(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  React.useEffect(() => {
+
     if (!tradingPairData) {
       getTradingPairData()
     }
     if (token) {
       getUserData()
     }
-  }, [userData, tradingPairData])
+  }, [userData, tradingPairData, token])
 
   return (
     <ChakraProvider>

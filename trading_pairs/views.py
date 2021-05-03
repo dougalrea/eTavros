@@ -2,6 +2,7 @@ from datetime import datetime, time, timedelta
 from django.http import JsonResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework import status
 from rest_framework.exceptions import NotFound, PermissionDenied
 from binance.client import Client
@@ -9,7 +10,6 @@ from .secrets import API_KEY, API_SECRET
 from .models import TradingPair
 from .serializers.common import TradingPairSerializer
 from .serializers.populated import PopulatedTradingPairSerializer
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 class TradingPairIndexView(APIView):
     """Controller for get request to /markets endpoint"""

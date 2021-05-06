@@ -107,7 +107,7 @@ Generating the Chart itself proved fairly straightforward, and was achieved with
         }))
       }
 
-So that defines the appearance of the chart itself, but now it needs to be populated with data. First, I needed to fill the chart with price data from the past hour, day, week etc, depending on the users 'interval' input. To retrieve historical price data of cryptocurriencies, I needed to bring in Binance's API. This is where things get interesting. The following makes the request to Django and sets the candledata as the response:
+So that defines the appearance of the chart itself, but now it needs to be populated with data. First, I needed to fill the chart with price data from the past hour, day, week etc, depending on the users 'interval' input. To retrieve historical price data of cryptocurriencies, I needed to bring in Binance's API. The following makes the request to Django and sets the candledata as the response:
 
       const getHistoricalKline = async () => {
         try {
@@ -191,8 +191,10 @@ The request to Binance depends on two variables, namely the cryptocurrency in qu
         
         return JsonResponse(processed_candlesticks, safe=False)
 
-The request to Binance's API must provide the trading pair ticker, which is retrieved from my Postgres database, along with the time interval for each candlestick, and and a begin and end time. For example, to retrieve bitcoin's price data from the last month of 2020 where each candle represents 5 minutes, the request would be `client.get_historcal_klines('BTCUSDT', Client.KLINE_INTERVAL_5MINUTE, "1 Dec, 2020", "1 Jan, 2021")`. The first argument gives the trading pair: BTC is bitcoin's ticker, and USDT is the ticker of a cryptocurrency tethered to the value of $1. All coins on eTavros can therefore only be traded against the US dollar.
+The request to Binance's API must provide the trading pair ticker, which is retrieved from my Postgres database, along with the time interval for each candlestick, and a begin & end time. For example, to retrieve bitcoin's price data from the last month of 2020 where each candle represents 5 minutes, the request would be `client.get_historcal_klines('BTCUSDT', Client.KLINE_INTERVAL_5MINUTE, "1 Dec, 2020", "1 Jan, 2021")`. The first argument gives the trading pair: BTC is bitcoin's ticker, and USDT (US Dollar Tether) is the ticker of a cryptocurrency tethered to the value of $1. All coins on eTavros are therefore traded against the US dollar.
 
-The time window of historical data to retrieve (i.e December 2020) needs to be adjusted according to the `time_frame` of each candlestick. Since retrieving more candlesticks takes more time, the window of historical data is adjusted such that only enough candlesticks to fill the chart area are requested. This minimises the user's wait time, and, quite literally in trading, time is money.
+The time window of historical data to retrieve (i.e December 2020) needs to be adjusted according to the `time_frame` of each candlestick. Since retrieving more candlesticks takes more time, the window of historical data is adjusted such that only enough candlesticks to fill the chart area are requested. This minimises the user's wait time which is important beacause (quite literally in this case) time is money.
 
-The response is then processed into a form easily interpreted at the front end.
+The response is then processed into the `processed_candlesticks` format to be easily interpreted at the front end.
+
+

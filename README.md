@@ -12,7 +12,7 @@ eTavros is an online cryptocurrency trading platform I built on a Python/Django 
 
 eTavros juggles multiple live websocket data streams with interactive trading chart generation, first and third party api requests, a range of third party libraries and (mostly) fool proof error handling all under the sleek hood of a single page application. Seriously, you should go **[check it out](https://etavros.herokuapp.com)**. Alternatively, feel free to clone this repo and run the app locally.
 
-![It was a great day for Ethereum!](/Users/yungdug/Downloads/IMG_0367.jpg "It was a good day for Ethereum")
+![It was a great day for Ethereum!](/resources/IMG_0367.jpg "It was a good day for Ethereum")
 
 ## Brief
 

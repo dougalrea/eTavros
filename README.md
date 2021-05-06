@@ -199,4 +199,3 @@ The time window of historical data to retrieve (i.e December 2020) needs to be a
 
 The response is then processed into the `processed_candlesticks` format to be easily interpreted at the front end.
 
-

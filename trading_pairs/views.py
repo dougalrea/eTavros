@@ -36,7 +36,7 @@ class TradingPairDetailView(APIView):
     permission_classes = (IsAuthenticatedOrReadOnly, )
     
     def get_trading_pair(self, name):
-        """ returns pokemon from db by its name or responds 404 not found """
+        """ returns trading pair from db by its name or responds 404 not found """
         try:
             return TradingPair.objects.get(name=name)
         except TradingPair.DoesNotExist:
@@ -46,7 +46,7 @@ class TradingPairDetailView(APIView):
         trading_pair = self.get_trading_pair(name=name)
         serialized_trading_pair = PopulatedTradingPairSerializer(trading_pair)
         return Response(serialized_trading_pair.data, status=status.HTTP_200_OK)
-      
+
 class TradingPairHistoricalData(APIView):
     """ Controller for get request to /markets/name/history endpoint"""
     
@@ -62,31 +62,25 @@ class TradingPairHistoricalData(APIView):
         client = Client(API_KEY, API_SECRET)
 
         trading_pair = self.get_trading_pair(name=name)
-        
+
         time_frame = request.headers['interval']
-
-        now = datetime.now() + timedelta(days=1)
         
-        if time_frame == "2h":
-            historic = datetime.now() - timedelta(days=85)
-        elif time_frame == "1m":
-            historic = datetime.now() - timedelta(days=1)
-        elif time_frame == "5m":
-            historic = datetime.now() - timedelta(days=2)
-        elif time_frame == "15m":
-            historic = datetime.now() - timedelta(days=12)
-        elif time_frame == "1h":
-            historic = datetime.now() - timedelta(days=55)
-        elif time_frame == "4h":
-            historic = datetime.now() - timedelta(days=200)
-        elif time_frame == "8h":
-            historic = datetime.now() - timedelta(days=800)
-        elif time_frame == "1d":
-            historic = datetime.now() - timedelta(days=2000)
-        else:
-            historic = datetime.now() - timedelta(days=1)
-            
-
+        def back_in_time(time_frame):
+            switcher={
+                "2h":timedelta(days=85),
+                "1m":timedelta(days=1),
+                "5m":timedelta(days=2),
+                "15m":timedelta(days=12),
+                "1h":timedelta(days=55),
+                "4h":timedelta(days=200),
+                "8h":timedelta(days=800),
+                "1d":timedelta(days=2000)
+            }
+            return switcher.get(time_frame, timedelta(days=1))
+        
+        now = datetime.now() + timedelta(days=1)
+        historic = datetime.now() - back_in_time(time_frame)
+        
         now_month = now.strftime("%b")       
         now_day = now.strftime("%d")
         now_year = now.strftime("%Y")
@@ -147,7 +141,7 @@ class TradingPair24hrData(APIView):
     def get(self, _request, name):
 
         client = Client(API_KEY, API_SECRET)
-
+        
         trading_pair = self.get_trading_pair(name=name)
         
         lastDayData = client.get_ticker(symbol=f'{trading_pair.ticker}BUSD')

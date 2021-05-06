@@ -12,7 +12,7 @@ eTavros is an online cryptocurrency trading platform I built on a Python/Django 
 
 eTavros juggles multiple live websocket data streams with interactive trading chart generation, first and third party api requests, a range of third party libraries and (mostly) fool proof error handling all under the sleek hood of a single page application. Seriously, you should go **[check it out](https://etavros.herokuapp.com)**. Alternatively, feel free to clone this repo and run the app locally.
 
-![It was a great day for Ethereum!](resources/IMG_0367.JPG "It was a good day for Ethereum")
+![It was a great day for Ethereum!](/resources/IMG_0367.JPG "It was a good day for Ethereum")
 
 ## Brief
 
@@ -198,4 +198,3 @@ The request to Binance's API must provide the trading pair ticker, which is retr
 The time window of historical data to retrieve (i.e December 2020) needs to be adjusted according to the `time_frame` of each candlestick. Since retrieving more candlesticks takes more time, the window of historical data is adjusted such that only enough candlesticks to fill the chart area are requested. This minimises the user's wait time which is important beacause (quite literally in this case) time is money.
 
 The response is then processed into the `processed_candlesticks` format to be easily interpreted at the front end.
-

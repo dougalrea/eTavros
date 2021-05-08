@@ -69,6 +69,8 @@ eTavros exceeds the requirements of the project brief because I was keen to work
 
 ## Approach
 
+### Chart
+
 The most important aspect of the application for me was the trading chart. This was the most challenging part (specifically the real-time aspect), and I figured if I couldn't get a live updating candestick trading chart in my application, I'd do something else. So once I had set up a basic Django back end and React front, I dug into the Lightweight Financial Charting library from Tradingview UK.
 
 Generating the Chart itself proved fairly straightforward, and was achieved with the following:
@@ -198,3 +200,179 @@ The request to Binance's API must provide the trading pair ticker, which is retr
 The time window of historical data to retrieve (i.e December 2020) needs to be adjusted according to the `time_frame` of each candlestick. Since retrieving more candlesticks takes more time, the window of historical data is adjusted such that only enough candlesticks to fill the chart area are requested. This minimises the user's wait time which is important beacause (quite literally in this case) time is money.
 
 The response is then processed into the `processed_candlesticks` format to be easily interpreted at the front end.
+
+What came next was perhaps the most challenging part of the whole project. Now that the historical data was on the chart, showing the price history of bitcoin in the past day, hour, week etc, I then needed to attach a new candle to the right hand edge of the chart to reflect the current price. Since demand for bitcoin is always fluctuating, so too it its value. This means the latest candle on the chart needs to grow and shrink to reflect the rise and fall of bitcoins price during that candle's time interval. This really brings the chart to life and gives the user a sense of involvement and opportunity.
+
+I spent about a day and a half banging my head against the the wall, at first, and then the floor, until eventually realising that websocket connection URLs are case sensitive. Since when are URLs case sensitive?? I was outraged, but also relieved, because it finally allowed the following function to breath life into my project:
+
+        const getLiveCandlestickUpdates = () => {
+          if (tradingPair && socketRef.current) {
+            console.log('Closing the Web Socket... Bye!')
+            socketRef.current.close()
+          }
+          socketRef.current = new WebSocket(`wss://stream.binance.com:9443/ws/${tradingPair.ticker.toString().toLowerCase()}busd@kline_${interval}`)
+          socketRef.current.onmessage = async (event) => {
+            const message = JSON.parse(event?.data)
+            const candlestick = message.k
+            if (
+              candleSeries.ed.dd.H_[candleSeries.ed.dd.H_.length - 1] 
+              && 
+              candlestick.t / 1000 >= candleSeries.ed.dd.H_[candleSeries.ed.dd.H_.length - 1].P.Cs
+            ) {
+              candleSeries.update({
+                time: candlestick.t / 1000,
+                open: candlestick.o,
+                high: candlestick.h,
+                low: candlestick.l,
+                close: candlestick.c
+              })
+              if (dayVolumeTicker % 2 === 0) {
+                getLastDayData()
+              } else {
+                dayVolumeTicker ++
+              }
+            }
+          }
+        }
+
+Lets break this function down, because there are a few things which look unneccassary but can be explained in the context of the whole project. `tradingPair` is the data retrieved from my Django back end, and provides the name (eg Bitcoin), the trating ticker (eg BTC), along with relationship data such as who has favouritied it, which comments are associated to it, and what buying & selling orders have been made on it. `socketRef` is defined at the top of the `Chart()` React component as `const socketRef = React.useRef()`. 
+
+- The `if` clause at the top prevents the same websocket from being connected to multiple times, which is what started happening when I switched back and forth between different trading pages in the browser. 
+
+- The tradingPair's name, ticker, and the time interval selected are all referenced in the websocket url itself, making the function versatile and applicable to a wide range of user input options.
+
+- The `socketRef.current.onmessage` defines what should be performed when the websocket sends a message. Now you may be looking at the `candleSeries.ed.dd.H_[candleSeries.ed.dd.H_.length - 1] && candlestick.t / 1000 >= candleSeries.ed.dd.H_[candleSeries.ed.dd.H_.length - 1].P.Cs` in the if clause and thinking "Wow what a horrific and unreadable line, what kind of psychopath would assign key-value pairs in an object names like `ed`, `H_`, and `Cs`?" I quite agree. It's carnage. But I didn't choose these names, these are just part of the Charting Library's `candleSeries`, which holds obscene amount of data for every candle.
+
+- Basically, the if clause with the unreadable line performs one final check that the time signature of the current price data in the websocket message is *later* than the time signature of the most recent candle already in the chart. It's a very rare scenario but does sometimes happen when the websocket connects before the chart has finished being generated. You can think of it as preventing the chart from going backwards.
+
+- The juicy bits of the websocket message, namely the current time, the price of the crypto when that time interval began (`open`), and ended (`close`), as well as the highest and lowest price recorded during that time interval, are then assigned to the newest candle on the chart.
+
+- Finally, a request is made to to Binance's API to retreive the total trading volume in the last 24 hrs. I was worried that my app would get blocked by Binance for excessive requests, so I only allowed requests to be sent on every second message from the websocket.
+
+### Buying & Selling
+#### Back End
+
+The second most important feature I wanted to incorporate was the ability to (virtually) buy and sell different cryptocurrencies. Actually, this is probably the *most* important feature of a crytpo trading platform, but in my imagination this functionality was less foreign than getting the live candlestick chart on the page. 
+
+Since everyone's cyrpto balances are only relevant to their own account, I structured the user model in Django to bear the data of portfolio holdings. By default, all enw users are given $100,000 of virtual money. All buying and selling performed by the user corresponds to a put request to their User Object, adjusting their account balances as calculated. Here's what that looks like in Python:
+
+- First, the user's permission classes and User Object are identified with
+
+        permission_classes = (IsAuthenticated, )
+
+        def get(self, request):
+            user = User.objects.get(pk=request.user.id)
+            serialized_user = PopulatedUserSerializer(user)
+            return Response(serialized_user.data, status=status.HTTP_200_OK)
+
+- Then the put def is defined. The new balances are calculated from the formData submitted from the front end like this:
+
+        def put(self, request):       
+            user_to_update = User.objects.get(pk=request.user.id)
+            asset_to_update = str(f'{request.data["tradingPairName"]}_balance')
+
+            new_balance_buy = getattr(user_to_update, asset_to_update) + Decimal(f"{request.data['amount']}")
+            new_balance_sell = getattr(user_to_update, asset_to_update) - Decimal(f"{request.data['amount']}")
+
+- If the amount of crypto the user is buying or selling is more than they can afford or more than they have respectively, Django sends the response to tell the user they have insufficient balances to cover their trade. Otherwise, their wallet balances are added to & subtracted from accordingly:
+
+        if request.data['buy']:
+            if user_to_update.cash_balance - Decimal(request.data['total']) < 0:
+                return Response('Insufficient balance in account', status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            user_to_update.cash_balance -= Decimal(request.data['total'])
+            setattr(user_to_update, asset_to_update, new_balance_buy)
+        else:
+            if new_balance_sell < 0:
+                return Response('Insufficient balance in account', status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            user_to_update.cash_balance += Decimal(request.data['total'])
+            setattr(user_to_update, asset_to_update, new_balance_sell)
+
+- The user's User object is then saved, and a 202 response is sent:
+
+        essential_data = {
+            'username': user_to_update.username, 
+            'password': user_to_update.password, 
+            'email': user_to_update.email
+            }
+
+        updated_user = UserSerializerForTrading(user_to_update, data=essential_data)
+            
+        if updated_user.is_valid():
+            updated_user.save()
+            return Response(updated_user.data, status=status.HTTP_202_ACCEPTED)
+        return Response(updated_user.errors, status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+
+#### Front End
+
+On the front end, I built a single, versatile React component to deliver both the buying and the selling forms. Work harder, not longer. I think the "work smarter, not harder" phrase doesn't really account for how intangible working smarter can be in practice. I feel that we instinctively work as 'smart' as we can, but this doesn't quite cut the mustard sometimes. And to think to oneself, "right, I need to pull myself together and work *smarter* today" is about as much use as saying, "Believe in yourself, and you can achieve anything." 
+
+Working *harder*, however, feels more accessible somehow, and working *longer* is definitely to be avoided. In some ways, I guess working *smarter* is working *harder*. Perhaps I should just advocate for "work smarter, not longer", and ditch 'harder' entirely. Either way, The FormTrade.js React component I built works wonders and I'm proud of it.
+
+The component begins by defining the trade request's empty state, and the default state of form & submission errors:
+
+        const initialState = {
+          'buy': '',
+          'amount': '',
+          'total': '',
+          'tradingPairName': ''
+        }
+        const [formdata, setFormdata] = React.useState(initialState)
+        const [errors, setErrors] = React.useState(initialState)
+
+Two essential pieces of data are required at this point: the user's account information and the latest price of the cryptocurrency (the specific crypto being traded is handed down to the FormTrade component as a prop from its parent)
+
+          const { name } = useParams()
+          const token = getToken()
+
+          const refreshLastPrice = async () => {
+            try {
+              const { data } = await get24HourData(name)
+              setLastPrice(data.lastPrice)
+            } catch (error) {
+              console.log('Error retrieving latest price data: ', error)
+            }
+          }
+
+          const getUserData = async () => {
+            try {
+              const token = getToken()
+              const { data } = await getUserProfile(token)
+              setUserData(data)
+            } catch (error) {
+              console.log('failed getting user data')
+              console.log(error)
+            }
+          }
+
+These are packaged up neatly in a React useEffect:
+
+          React.useEffect(() => {
+            refreshLastPrice()
+            getUserData()
+          }, [token])
+
+The `refreshLastPrice()` function is called before every trade, so the user is always trading at the most recent price, not just the price at the time of page load.
+
+The trading form has two fields: the amount of cryptocurrency and the amount of USD. Lets say the user wants to buy Ethereum. I wanted the user to be able to chose whether to input how much USD they want to spend, eg "I want to buy $5,000 worth of Ethereum" or how much ethereum they awnt to buy, eg "I want to buy 2.5 Ethereum." In each case, I wanted the user to see what the corresponding amount in the opposite currency was. This is exactly the kind of inessential, beyond mvp, I-wonder-if-I-can-do-that type of rabbit hole I love exploring. Similar to how I allowed the login process to accept both the account username and email in the same field - FREEDOM TO THE USER!!
+
+Back to the point, this requires the value of the opposite field to be calculated and presented on every keypress of the user's input. Here's how that works:
+
+        const handleChange = (event) => {
+          if (event.target.name === 'amount') {
+            const amountValue = event.target.value
+            const totalValue = amountValue * lastPrice
+            const nextState = { ...formdata, 'amount': amountValue, 'total': totalValue }
+            setFormdata(nextState)
+            setErrors({ ...errors, [event.target.name]: '' })
+          }
+          if (event.target.name === 'total') {
+            const totalValue = event.target.value
+            const amountValue = (totalValue / lastPrice)
+            const nextState = { ...formdata, 'amount': amountValue, 'total': totalValue }
+            setFormdata(nextState)
+            setErrors({ ...errors, [event.target.name]: '' })
+          }
+        }
+
+
+

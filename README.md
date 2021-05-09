@@ -367,5 +367,129 @@ Back to the point, this requires the value of the opposite field to be calculate
           }
         }
 
+This is nice, but there is room for improvement. The calculated equivalent in the opposite currency is a little too exact, and gives as many decimal places as necessary. While this isn't game-breaking, it's not particularly easy to read if you're trading in a hurry. Unfortunatly there isn't an easy way to separate what the user sees in the input bar from what is actually sent with the API request, so a compromise has to be made. Either the numbers are shown to a few significant figures, and the values submitted with upon trade execution are inaccurate, or the values are perfectly accurate, but the non-inputted value looks messy and sometimes has 24 decimal places. I went with the latter. Sue me.
+
+Here is the full handeTrade function from the front end:
+
+        const handleTrade = async event => {
+          event.preventDefault()
+          try {
+            formdata.amount = formdata.total / lastPrice
+            formdata.tradingPairName = tradingPair.name
+            formdata.buy = orderType === 'Buy'
+            const token = getToken()
+            await refreshLastPrice()
+            await performTrade(formdata, token)
+            await createTradePost({
+              'bought_or_sold': formdata.buy,
+              'amount': formdata.amount,
+              'total': formdata.total,
+              'trading_pair': tradingPair.id
+            }, token)
+            triggerToast()
+            getUserData()
+            setTradingPairDataFound(false)
+            setError(false)
+            setFormdata(initialState)
+          } catch (error) {
+            if (!token) {
+              setError('You must be logged in to make trades!')
+            } else if (
+              (
+                orderType === 'Buy' 
+                && 
+                parseFloat(userData?.cash_balance) < parseFloat(formdata?.total)
+              ) 
+              || 
+              (
+                orderType === 'Sell' 
+                && 
+                parseFloat(userData[`${tradingPair?.name}_balance`]) < parseFloat(formdata?.amount)
+              )
+              ||
+              (
+                formdata?.total < 0
+              )
+              ||
+              (
+                formdata?.amount < 0
+              )
+            ) {
+              setError('Insufficient balance!')
+            } else {
+              console.log('unexpected error: ', error)
+              setError('Something unexpected happened, sorry about that!')
+            }
+          }
+          setTimeout(() => {
+            setError(false)
+          }, 2800)
+          setBalanceChangeTicker(!balanceChangeTicker)
+        }
+
+Upon execution of every trade, the user will instantly see their balances updated on the page (thank you, `balanceChangeTicker`!) and a new trade post added to the feed of recent trades. Embedded in every trade request is another request: a POST to the '/tradeposts' endpoint. This is called by the following function:
+
+        await createTradePost({
+          'bought_or_sold': formdata.buy,
+          'amount': formdata.amount,
+          'total': formdata.total,
+          'trading_pair': tradingPair.id
+        }, token)
+
+A trade post records how much of which currency was bought or sold by who at what time, and how much it cost. 
+
+The feed of all trade posts is publicly visible to the right of the trading chart, and allows all eTavros users to view the full trade history of each coin on the platform. This can (perhaps) help inform trade decisions, and allows users to track certain user's trading activity.
+
+### Relationships
+
+Who needs 'em, right? Wrong. eTavros needs them. Before delving into Django and establishing many-to-many & one-to-many relationships in each app's models.py, I spent a few hours planning the architecture of the back end database on QuickDBD. Here's the result:
+
+![eTavros Django relationships](/resources/QuickDBD.png "eTavros Relationships")
+
+I established a many-to-many relationship between Users and Coins(TradingPair) to enable favouriting functionality. Here's the Django model for each Crypto:
+
+        class TradingPair(models.Model):
+            name = models.CharField(max_length=30, unique=True)
+            ticker = models.CharField(max_length=5, unique=True)
+            symbol = models.CharField(max_length=400)
+            description = models.CharField(max_length=500, blank=True)
+            favourited_by = models.ManyToManyField(
+                'jwt_auth.User',
+                related_name='favourited_coins',
+                blank=True
+            )
+            total_suppy = models.BigIntegerField(blank=True)
+            
+            def __str__(self):
+                return f"{self.name} - {self.ticker}"
+
+The one-to-many relationships necessary for commenting and trade posts lie within the models.py of each app. Here is that of trade_posts:
+
+        class Trade_post(models.Model):
+            created_at = models.DateTimeField(auto_now_add=True)
+            trading_pair = models.ForeignKey(
+              "trading_pairs.TradingPair",
+              related_name="trade_posts",
+              on_delete=models.CASCADE
+            )
+            owner = models.ForeignKey(
+              "jwt_auth.User",
+              related_name="posted_trades",
+              on_delete=models.CASCADE
+            )
+            bought_or_sold = models.BooleanField(blank=False)
+            amount = models.FloatField(validators=[MinValueValidator(0)])
+            total = models.FloatField(validators=[MinValueValidator(0)])
+
+            def __str__(self):
+                return f"{self.amount} of {self.trading_pair} {self.bought_or_sold} by {self.owner} for {self.total}"
+
+Each trade post must be attributed only to:
+- one User, since it corresponds to one trade by one account (the 'owner') 
+- one cryptocurrency(trading_pair), since only one crypto can be traded at a time. 
+
+However, a single crypto currency is expected to have many trade_posts related to it. A one-to-many relationship is therefore required to both users and trading_pairs.
+
+Not everything from my QuickDBD diagram made it through to the current version of eTavros, such as the many-to-many relationship enabling users to 'follow' other users, but this diagram neatly demostrates further areas for development.
 
 

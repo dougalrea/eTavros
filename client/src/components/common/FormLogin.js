@@ -47,7 +47,7 @@ function FormLogin({ loggedIn, getUserData }) {
       await loginUser(formdata)
         .then(response => {
           if (response.status === 200) {
-            console.log('log in successful', response.data)
+            console.log('log in successful')
             loggedIn()
             triggerToast()
             setToken(response.data.token)

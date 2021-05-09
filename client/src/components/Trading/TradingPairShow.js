@@ -136,10 +136,10 @@ function TradingPairShow() {
     }
   }, [tradingPairDataFound, tradingPair])
 
-  React.useEffect(() => {
-    getUserData()
+  React.useEffect(async () => {
+    await getUserData()
 
-    getTradingPairData()
+    await getTradingPairData()
     setTradingPairDataFound(true)
 
   }, [tradingPairDataFound, token])

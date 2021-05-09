@@ -149,25 +149,27 @@ function Nav() {
     triggerToast()
   }
 
-  React.useEffect(() => {
-    getUserData()
+  React.useEffect(async () => {
+    await getUserData()
     if (!tradingPairsArray) {
-      getTradingPairsArray()
+      await getTradingPairsArray()
     }
   }, [token, tradingPairsArray])
 
-  React.useEffect(() => {
+  React.useEffect(async () => {
 
     dollarValuesArray = []
     walletBalancesArray = []
+
+    await getUserData()
 
     if (userData && tradingPairsArray) {
       tradingPairsArray.map(tradingPair => {
         return getLastPrice(tradingPair.name)
       })  
-    }
+    } else console.log('either userData or tradingPairsArray is falsey')
     
-  }, [tradingPairsArray, userData])
+  }, [tradingPairsArray, isOpenWallet])
 
   return (
     <>

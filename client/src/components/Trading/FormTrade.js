@@ -124,7 +124,7 @@ function FormTrade({ orderType, tradingPair, setTradingPairDataFound, userData, 
         'trading_pair': tradingPair.id
       }, token)
       triggerToast()
-      getUserData()
+      await getUserData()
       setTradingPairDataFound(false)
       setError(false)
       setFormdata(initialState)

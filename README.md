@@ -500,4 +500,6 @@ The **[online version](https://etavros.herokuapp.com)** unfortunately doesn't wo
 
 - The nav bar in general sometimes appears to forget that the user is logged in, and shows the 'Log in' and 'Register' buttons instead of the 'View Wallet' and 'Log Out' buttons, even though all other account features like trading and commenting are still available.
 
+These bugs can often be bypassed by refreshing the page.
+
 Please note these bugs do not occur when running the application locally.

@@ -436,7 +436,7 @@ Upon execution of every trade, the user will instantly see their balances update
           'trading_pair': tradingPair.id
         }, token)
 
-A trade post records how much of which currency was bought or sold by who at what time, and how much it cost. 
+A trade post records how much of which currency was bought or sold by who at what time, and at what price. 
 
 The feed of all trade posts is publicly visible to the right of the trading chart, and allows all eTavros users to view the full trade history of each coin on the platform. This can (perhaps) help inform trade decisions, and allows users to track certain user's trading activity.
 

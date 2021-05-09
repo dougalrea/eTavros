@@ -16,8 +16,6 @@ eTavros juggles multiple live websocket data streams with interactive trading ch
 
 ## Brief
 
-### Project Brief
-
 - Build a full-stack application by making your own backend and your own front-end.
 - Use a Python Django API using Django REST Framework to serve your data from a Postgres database.
 - Consume your API with a separate front-end built with React.
@@ -492,4 +490,14 @@ However, a single crypto currency is expected to have many trade_posts related t
 
 Not everything from my QuickDBD diagram made it through to the current version of eTavros, such as the many-to-many relationship enabling users to 'follow' other users, but this diagram neatly demostrates further areas for development.
 
+## Bugs
 
+eTavros appears to operate seamlessly when run from a local environment, rather than accessed via the herokuapp URL. If you are interested in fully exploring the depth of eTavros's functionality and/or don't believe it can be as bug-free as I claim it is, please fork the repo on GitHub, build the environment locally from the pipfile, and run `python manage.py runserver` from a pip shell. 
+
+The **[online version](https://etavros.herokuapp.com)** unfortunately doesn't work as smoothly, since the free herokuapp deployment server can't seem to keep up with the high volume of requests and websockets in operation. The following bugs *occasionally* occur:
+
+- The 'View Wallet' feature is therefore rendered particularly buggy, as it initiates 12 simultaneous requests to the Binance API. These often return a 501 internal server error.
+
+- The nav bar in general sometimes appears to forget that the user is logged in, and shows the 'Log in' and 'Register' buttons instead of the 'View Wallet' and 'Log Out' buttons, even though all other account features like trading and commenting are still available.
+
+Please note these bugs do not occur when running the application locally.

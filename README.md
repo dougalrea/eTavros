@@ -10,9 +10,17 @@ eTavros is an online cryptocurrency trading platform I built on a Python/Django 
 - view the trade history of each coin & witness third party trades as they happen,
 - interpret & contribute to live market sentiment with coin-favouriting and Bullish/Bearish commenting functionality.
 
-eTavros juggles multiple live websocket data streams with interactive trading chart generation, first and third party api requests, a range of third party libraries and (mostly) fool proof error handling all under the sleek hood of a single page application. Seriously, you should go **[check it out](https://etavros.herokuapp.com)**. Alternatively, feel free to clone this repo and run the app locally.
+eTavros juggles multiple live websocket data streams with interactive trading chart generation, first and third party api requests, a range of third party libraries and (mostly) fool proof error handling all under the sleek hood of a single page application.
 
 ![It was a great day for Ethereum!](/resources/trading_page_screenshot.jpg "It was a great day for Ethereum!")
+
+## Disclaimer
+
+eTavros operates seamlessly when run from a local environment, rather than accessed via the herokuapp URL. If you are interested in fully exploring the depth of eTavros's functionality and/or don't believe it can be as bug-free as I claim it is, please fork the repo on GitHub, build the environment locally from the pipfile, and run python manage.py runserver from a pip shell.
+
+The online version unfortunately doesn't work as smoothly, since the free herokuapp deployment server can't seem to keep up with the high volume of requests and websockets in operation. It seems to work a little more reliably if you navigate through the website slowly, however.
+
+Go **[check it out!](https://etavros.herokuapp.com)**. 
 
 ## Brief
 
